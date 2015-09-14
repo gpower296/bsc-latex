@@ -1,0 +1,85 @@
+\chapter{Source Code}
+\label{chap:sourcecode}
+
+\begin{center}
+\lstset{language=VHDL}
+\begin{lstlisting}[caption={Combinational part of the checker for state transition inspection},label={lst:appendix_trans_checker}]
+...
+  -- combinational transition checking
+  process (next_state, curr_state, rst_n)
+  begin  -- process
+
+    transition_error <= '0';
+
+    case next_state is
+
+      when INIT =>
+        null;
+        
+      when READY =>
+        if curr_state /= INIT
+          and curr_state /= READY
+          and curr_state /= IFG then
+          transition_error <= '1';
+        end if;
+
+      -- we check the next state against the current state
+      when PREAMBLE =>
+        if curr_state /= READY
+          and curr_state /= PREAMBLE then
+          transition_error <= '1';
+        end if;
+
+      when SFD =>
+        if curr_state /= PREAMBLE then
+          transition_error <= '1';
+        end if;
+
+      when DEST =>
+        if curr_state /= SFD
+          and curr_state /= DEST then
+          transition_error <= '1';
+        end if;
+
+      when SRC =>
+        if curr_state /= DEST
+          and curr_state /= SRC then
+          transition_error <= '1';
+        end if;
+
+      when PAYLOAD =>
+        if curr_state /= SRC
+          and curr_state /= PAYLOAD then
+          transition_error <= '1';
+        end if;
+
+      when PAD =>
+        if curr_state /= PAYLOAD
+          and curr_state /= PAD
+          and curr_state /= FLUSH then
+          transition_error <= '1';
+        end if;
+
+      -- flush state can always be accessed in case of tx-error
+      when FLUSH =>
+        null;
+
+      when CRC =>
+        if curr_state /= PAYLOAD
+          and curr_state /= PAD
+          and curr_state /= FLUSH
+          and curr_state /= CRC then
+          transition_error <= '1';
+        end if;
+
+      -- ifg state can always be accessed in case of tx-error
+      when IFG =>
+        null;
+        
+      when others => transition_error <= '1';
+    end case;
+    
+  end process;
+...
+\end{lstlisting}
+\end{center}

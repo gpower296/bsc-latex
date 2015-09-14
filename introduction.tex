@@ -1,0 +1,235 @@
+
+% disable for numbered page 
+\thispagestyle{empty}
+%
+\chapter{Introduction to general \LaTeX{} features}
+\label{chap:introduction}
+
+A possible way to start a chapter/thesis is a matching quote such as this:
+
+\begin{quote}
+  "Design for Reliability is nothing but Design for yield in the
+  temporal dimension"\\
+  Giovanni De Micheli 2004, EPF Lausanne
+\end{quote}
+
+The following sections are dedicated to various features \LaTeX{} offers to the author.
+
+\section{Listing Environments}
+\label{sec:listingenvironments}
+
+Itemize:
+\begin{itemize}
+	\item Information redundancy: check sums, state encoding, etc.
+	\item Spatial redundancy: TMR
+	\item Temporal redundancy: check points, repeated calculations
+\end{itemize}
+
+\medskip
+
+Enumerate:
+\begin{enumerate}
+	\item Information redundancy: check sums, state encoding, etc.
+	\item Spatial redundancy: TMR
+	\item Temporal redundancy: check points, repeated calculations
+\end{enumerate}
+
+\medskip
+
+Description:
+\begin{description}
+	\item[Information redundancy:] check sums, state encoding, etc.
+	\item[Spatial redundancy:] TMR
+	\item[Temporal redundancy:] check points, repeated calculations
+\end{description}
+
+\section{An overview of pre-defined text formats}
+\label{sec:overview_textformats}
+
+\setstretch{1.0}
+\verb$\emph{}:$ \emph{Lorem ipsum dolor sit amet, consectetur adipisici elit.}\\
+\verb$\textbf{}:$ \textbf{Lorem ipsum dolor sit amet, consectetur adipisici elit.}\\
+\verb$\textit{}:$ \textit{Lorem ipsum dolor sit amet, consectetur adipisici elit.}\\
+\verb$\textsl{}:$\footnote{italic and slanted are different fonts!} \textsl{Lorem ipsum dolor sit amet, consectetur adipisici elit.}\\
+\verb$\textsf{}:$ \textsf{Lorem ipsum dolor sit amet, consectetur adipisici elit.}\\
+\verb$\textsc{}:$ \textsc{Lorem ipsum dolor sit amet, consectetur adipisici elit.}\\
+\verb$\texttt{}:$ \texttt{Lorem ipsum dolor sit amet, consectetur adipisici elit.}\\
+\verb&\verb$$:& \verb$Lorem ipsum dolor sit amet, consectetur adipisici elit.$\\
+\verb$\large{}:$ \large{Lorem ipsum dolor sit amet, consectetur adipisici elit.}\\
+\verb$\Large{}:$ \Large{Lorem ipsum dolor sit amet, consectetur adipi\dots}\\
+\verb$\LARGE{}:$ \LARGE{Lorem ipsum dolor sit amet, consecte\dots}\\
+\verb$\huge{}:$ \huge{Lorem ipsum dolor sit amet \dots}\\
+\verb$\Huge{}:$ \Huge{Lorem ipsum dolor sit amet \dots}
+\normalsize{}
+
+Text formatting can be reset to normal via the :
+\verb$\normalsize{}$
+command.
+
+Footnotes can be set via the \verb$\footnote{}$ command.\\
+Here is an example:
+\verb$\footnote{Creating footnotes is easy!}$ will translate into this.\footnote{Creating footnotes is easy!}
+
+\section{Symbols in \LaTeX}
+\label{sec:symbols}
+
+\begin{table}[H] %[H] means place here under all circumstances!
+\centering{
+	% Note that the caption appears before the actual table
+	% --> will be correctly placed above it!
+	\caption{List of commonly used \LaTeX{} symbols/characters}
+	\label{tab:specialchars}
+	\vspace{0.5cm}
+	\begin{tabular}{ l l l }
+		\toprule
+		\textbf{Symbol/Character}	& \textbf{\LaTeX{} source code}	& \textbf{Comments}\\
+		\midrule
+		Space			         	& \verb$~$              & Avoid if possible\dots \\
+		-                   & \verb$-$              & Short hyphen/dash (O-Beine)\\
+		--                  & \verb$--$             & Long hyphen/dash (8 a.m.-- 6 p.m.)\\
+		---                 & \verb$---$            & Long english hyphen/dash\\ 
+		\dq Text\dq\        & \verb$\dq Text \dq$   & English quotation marks\\ 
+		\glqq Text\grqq\    & \verb$\glqq ...\grqq$ & German quotation marks\\ 
+		\glq Text\grq\      & \verb$\glq ...\grq$   & German, simple apostrophe\\ 
+		\EUR{50}            & \verb$\EUR{50}$       & Euro symbol\\ 
+		\o{}                & \verb$\o{}$           & Diameter\\ 
+		\$                  & \verb&\$&             & Dollar sign\\ 
+		\%                  & \verb$\%$             & Per cent sign \\ 
+		\&                  & \verb$\&$             & Ampersand \\ 
+		\#                  & \verb$\#$             & Hash\\ 
+		\{                  & \verb$\{$             & Left brace\\ 
+		\}                  & \verb$\}$             & Right brace\\ 
+		\_                  & \verb$\_$             & Underscore\\ 
+		\S                  & \verb$\S$             & Paragraph\\ 
+		\copyright          & \verb$\copyright$     & Copyright\\ 
+		\pounds             & \verb$\pounds$        & British Pound\\ 
+		\dots               & \verb$\dots$          & Tripple dots\\ 
+		$\cdots$            & \verb&$\cdots$&       & Tripple dots, height-centered\\ 
+		$\times$            & \verb&$\times$&       & Multiplication\\ 
+		$\backslash$        & \verb&$\backslash$&   & Backslash, italic (math mode)\\ 
+		\textbackslash      & \verb$\textbackslash$ & Backslash\\ 
+		$\leftarrow$        & \verb&$\leftarrow$&   & \\ 
+		$\rightarrow$       & \verb&$\rightarrow$&  & \\ 
+		$\uparrow$          & \verb&$\uparrow$&     & \\ 
+		$\downarrow$        & \verb&$\downarrow$&   & \\ 
+		$\Leftarrow$        & \verb&$\Leftarrow$&   & \\ 
+		$\Rightarrow$       & \verb&$\Rightarrow$&  & \\ 
+		$\Uparrow$          & \verb&$\Uparrow$&     & \\ 
+		$\Downarrow$        & \verb&$\Downarrow$&   & \\ 
+		$\hookleftarrow$    & \verb&$\hookleftarrow$& & Indicates line break\\ 
+		$\pm$               & \verb&$\pm$&          & \\ 
+		$\mp$               & \verb&$\mp$&          & \\ 
+		\bottomrule
+		\end{tabular}
+} % \centering
+\end{table}
+
+\section{Algorithms \& Pseudo-Code}
+\label{sec:math}
+
+Let there be an linear system $A \textbf{x} = \textbf{b}$, with  $A$ in $\mathds{R}^{(n, n)}$, $\textbf{x} \in \mathds{R}^n$ und $\textbf{b} \in \mathds{R}^n$. Additionally let $A$ be regular. One possibility to determine the solution vector $\textbf{x}$ can be found using the \emph{gaussian elimination}. The following illustrates the algorithm employing a column pivot search as pseudo code.
+
+\begin{algorithm}
+\caption{SolveLinearSystemGauss($A, \textbf{b}$) $\rightarrow \textbf{x}$}
+\label{alg:gauss}
+\begin{algorithmic}
+{\small
+\FOR{$i := 0$ \textbf{to} $n-1$}
+  \STATE $max := 0, p := -1$
+  \STATE
+  \FOR {$j := i$ \textbf{to} $n-1$}
+    \IF {$(|a_{ji}|\ >\ max)$}
+      \STATE $max := |a_{ji}|, p := j$
+    \ENDIF
+  \ENDFOR
+  \STATE
+  \IF {$p = -1$}
+    \STATE STOP \COMMENT{Matrix $A$ is not regular}
+  \ENDIF
+  \STATE
+  \IF {$p \neq i$}
+    \STATE SwapLines(A, $i$, $p$)
+    \STATE $s := b_i, b_i := b_p, b_p := s$
+  \ENDIF
+  \STATE
+  \STATE $pivot := a_{ii}$
+  \STATE
+  \FOR {$j := i + 1$ \textbf{to} $n-1$}
+    \STATE $factor := a_{ji} / pivot$
+    \STATE $b_j := b_j - factor \cdot b_i$
+    \FOR {$k := i + 1$ \textbf{to} $n-1$}
+      \STATE $a_{jk} := a_{jk} - factor \cdot a_{ik}$
+    \ENDFOR
+  \ENDFOR
+\ENDFOR
+\STATE
+\FOR {$i := n-1$ \textbf{downto} $0$}
+  \STATE $sum := 0$
+  \FOR {$j := i + 1$ \textbf{to} $n-1$}
+    \STATE $sum := sum + a_{ij} \cdot x_j$
+  \ENDFOR
+  \STATE $x_i := (b_i - sum) / a_{ii}$
+\ENDFOR
+}
+\end{algorithmic}
+\end{algorithm}
+\clearpage
+
+\setstretch{1.5}
+
+\section{Images \& Figures}
+\label{sec:images}
+
+One may include pictures as a single figure or multiple pictures together as one figure using the package $subfigure$.
+Generally vector graphics shall be preferred to raster graphics.
+
+This is a single image in a floating figure environment:
+\setstretch{1.0}
+\begin{verbatim}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{pics/let_distance}
+	\caption{Linear Energy Transfer (LET) in Abhängigkeit der
+          Ursprungsenergie und des Ursprungspartikels \cite{baumann2005b}}
+	\label{fig:grundlagen_softerrors_letgraph}
+\end{figure}
+\end{verbatim}
+
+\verb$[htbp]$ indicates placement options for \LaTeX{}. These can be 
+\begin{itemize}
+	\item \verb$[h]$ \dots{} here
+	\item \verb$[t]$ \dots{} top of the page
+	\item \verb$[b]$ \dots{} bottom of the page
+	\item \verb$[p]$ \dots{} on a seperate page
+\end{itemize}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{pics/let_distance}
+	\caption{Linear Energy Transfer (LET) in Abhängigkeit der
+          Ursprungsenergie und des Ursprungspartikels \cite{baumann2005b}}
+	\label{fig:figure_example}
+\end{figure}
+
+\setstretch{1.5}
+
+When there is a need to display smaller images of a common context, one can use \emph{subfigures}.
+See the documentation of the $subfigure$ package for further options, especially regarding caption placement.
+\begin{figure}[htbp]
+\centering
+\subfigure[Bestandteile einer fiktiven FPGA-Architektur]{
+	\includegraphics[width=0.3\linewidth]{pics/fpga_simple_architecture}
+	%\caption{Bestandteile einer fiktiven FPGA-Architektur}
+	\label{fig:subfig_fpga}
+}
+\subfigure[Logischer Aufbau einer LUT mit zwei Eingängen]{
+\includegraphics[width=0.3\linewidth]{pics/lut}
+\label{fig:subfig_lut}
+}
+\subfigure[Aufbau eines ``Adaptive Logic Module'' der Stratix\TReg\ II-Familie]{
+	\includegraphics[width=0.5\linewidth]{pics/alm_internal}
+	\label{fig:subfig_alm}
+}
+\label{fig:subfigure_example}
+\caption[Subfig Example: Abbreviated caption used in list of figures]{Complete Caption within which one may reference the individual subfigures \subref{fig:subfig_fpga}, \subref{fig:subfig_lut} and \subref{fig:subfig_alm} for further description. }
+\end{figure}

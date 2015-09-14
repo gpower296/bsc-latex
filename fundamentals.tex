@@ -1,0 +1,1242 @@
+\chapter{Grundlagen}
+\label{chap:grundlagen}
+
+The chapter wherein background knowledge with should be shared with the reader. All paradigms/techniques/algorithms used later on, need to be thoroughly explained.
+The following pages will act as a (german) example for the inclusion of equations, figures, citations, tables, hyphenation and formatting.
+
+\section{Fehler und Zuverlässigkeit von digitalen Schaltungen}
+\label{sec:fehler_zuverlässigkeit}
+Durch die stetig zunehmende Integrationsdichte und somit auch
+Komplexität ist es auf Systemebene immer schwieriger die notwendigen
+Zuverlässigkeitskriterien zu erfüllen. Außerdem wird eine ebenso
+wachsende Zuverlässigkeit vorausgesetzt. 
+
+Wurde 1964 für den Startcomputer der Saturn V noch eine
+Zuverlässigkeit von 0,99 für \unit{250}{\hour} zu Grunde gelegt,
+durfte das elektronische Schaltsystem der ``Bell Telephone'' 1986 lediglich
+2 Minuten pro Jahr ausfallen \cite[S. xiii]{lala1985}. Die Nachfrage
+nach hochverfügbaren Systemen agiert ebenso als Schrittmacher für
+zuverlässige Systeme. Am 06.06.2008 war die Internetpräsenz des
+Online-Versandhauses ``Amazon.com, Inc.'' für circa 2 Stunden nicht
+erreichbar, woraufhin der Börsenwert um rund 1,6 Milliarden US-Dollar
+fiel \cite{spiegel08}.
+
+Der Ausfall einzelner Komponenten eines Systems kann folgenschwere
+Auswirkungen haben, weswegen Zuverlässigkeit ein wesentliches
+Kriterium bei der Entwicklung sein muss.
+
+\section{Terminologie}
+\label{sec:grundlagen_zuverlässigkeit_terminologie}
+
+Im Kontext der Zuverlässigkeitstheorie werden in der Regel drei
+Grundbegriffe definiert: Störung, Fehler und Ausfall.
+Eine Störung ist ein physikalisch vorliegender Defekt einer Hard-
+oder Softwarekomponente. Als Fehler wird dabei das Wirksam- oder
+Sichtbarwerden der Störung bezeichnet. Ein Ausfall tritt dann ein,
+wenn ein Fehler zu einem inkorrekten Verhalten eines Systems oder einer Komponente geführt
+hat. Fehler müssen aber nicht zwangsläufig zu einem Systemausfall
+führen, ebenso wenig wie Störungen sich in Form eines Fehlers
+manifestieren müssen.
+
+Um eine zeitliche Verknüpfung zwischen Zuverlässigkeit und
+Ausfallwahrscheinlichkeit herzustellen, wird im Allgemeinen folgende
+Beziehung verwendet (Herleitung siehe \cite[S.4 ff.]{lala2001}):
+\begin{equation}
+  \label{eq:failure_law}
+  R(t) = e^{-\lambda t}
+\end{equation}
+wobei $\lambda$ die Anzahl der Fehler pro Stunde darstellt. Falls das
+Produkt $\lambda t$ klein ist, lässt sich Gleichung \ref{eq:failure_law}
+zu 
+\begin{equation}
+  \label{eq:failure_law_simple}
+  R(t) = 1-\lambda t
+\end{equation}
+
+vereinfachen. Eine gebräuchlichere Angabe ist jedoch die Zeit, für die ein
+System zwischen zwei Ausfällen im Durchschnitt lauffähig sein wird
+(MTBF). Sie lässt sich aus der Integration der Zuverlässigkeit über
+die Zeit herleiten:
+\begin{align}
+  \label{eq:mtbf}
+  \nonumber  \text{MTBF} & = \int\limits_{0}^{\infty} e^{-\lambda t} dt\\
+  & = -\frac{1}{\lambda}{e^{-\lambda t}}_0^{\infty}  = \frac{1}{\lambda}
+\end{align}
+
+Die MTBF stellt also das Reziproke der Fehlerrate dar und wird, falls
+$\lambda$ der Anzahl von Fehlern pro Stunde entspricht, in Stunden
+angegeben. Die Zuverlässigkeit eines Systems lässt sich unter
+Verwendung der MTBF mittels:
+\begin{align}
+  \label{eq:reliability_mtbf}
+  \nonumber R(t) & = e^{-\lambda t}\\
+  & = e^{-t/\text{MTBF}}
+\end{align}
+beschreiben. Eine kurze Beispielrechnung soll die Anwendung der hergeleiteten
+Gleichungen erläutern. Innerhalb eines Systems existieren 1000
+Komponenten, jede mit einer Ausfallwahrscheinlichkeit von 0,001 Fehlern
+pro Stunde. Gesucht ist nun die Zeit, mit der das System zu 99~\%
+zuverlässig arbeitet.
+\label{eq:reliability_rechnung}
+\begin{align*}
+  \text{MTBF} & = \frac{t}{1-R(t)}\\
+  & = \frac{t}{1-0,99}\\
+  t & = MTBF \cdot 0,01\\
+  & = 0,\frac{0,01}{\lambda_{System}} = \frac{0,01} {N \cdot
+    \lambda} = \frac{0,01}{1000 \cdot \unit{0,001}{\reciprocal\hour}} \\
+  & = \unit{0,1}{\hour} = \unit{6}{\minute}
+\end{align*}
+
+Die Beispielrechnung verdeutlicht, wie schwierig es ist ein
+zuverlässiges System zu erzeugen, welches aus mehreren
+Komponenten besteht. 
+
+Neben des Aspekts der Zuverlässigkeit entscheidet ein weiterer über
+die Verfügbarkeit eines Systems: die mittlere Zeit zur
+Wiederherstellung ``Mean-Time-To-Recover'' (MTTR). Sie wird als
+einfaches Zeitmaß angegeben, welches die Zeit widerspiegelt, die ein
+System aus Wartungs- oder Reparaturgründen nicht verfügbar ist. 
+
+In Verbindung mit der MTBF lässt sich nun eine Aussage über die
+Verfügbarkeit eines Systems treffen, denn man kann verfügbare und
+nicht verfügbare Zeit ins Verhältnis setzen:
+\begin{align}
+  \label{eq:verfügbarkeit}
+\nonumber  \text{Verfügbarkeit} & = \frac{\text{verfügbare
+    Zeit}}{\text{verfügbare Zeit} + \text{ nicht verfügbare Zeit}}\\[3mm]
+\nonumber  & = \frac{\text{verfügbare Zeit}} {\text{verfügbare Zeit} + \text{Anzahl Fehler} \cdot \text{MTTR}}\\[3mm]
+\nonumber  & = \frac{\text{verfügbare Zeit}} {\text{verfügbare Zeit} + \lambda \cdot \text{MTTR}}\\[3mm]
+\nonumber  & = \frac{1}{1 + (\lambda \cdot \text{MTTR})}\\[3mm]
+& = \frac{\text{MTBF}}{\text{MTBF} + \text{MTTR}}
+\end{align}
+
+Um das System insgesamt verfügbar zu machen, muss es also nicht nur
+eine geringe Fehlerrate aufweisen, sondern auch schnell zu reparieren
+sein. Zur Reparaturzeit ist dabei die Zeit vom Existieren bis zum Erkennen eines
+Fehlers, der Lokalisierung des Fehlers, die eigentliche Zeit für das
+Austauschen der fehlerhaften Komponente sowie Zeit zur
+Re-Initialisierung des Systems zu zählen. Da die Fehlerrate im
+Allgemeinen durch eine bestimmte Technologie oder Umgebung vorgegeben
+ist, kann nur durch Senken der MTTR eine Verbesserung der
+Verfügbarkeit erzielt werden.
+
+
+\subsection{Ursachen für fehlerhaftes Verhalten von digitalen Schaltungen}
+
+Für Fehlverhalten von digitalen Schaltungen existieren Ursachen auf
+allen Hard\-ware\-ent\-wurfs\-e\-ben\-en. 
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.8\textwidth]{pics/fehler_ebenen}
+	\caption{Übersicht über mögliche Fehler im Lebenszyklus einer digitalen Schaltung}
+	\label{fig:grundlagen_fehlerübersicht}
+\end{figure}
+
+Fehler in der Spezifikation lassen sich durch eine Validierung der
+existierenden Spezifikation finden. Durch Methoden der formalen
+Verifikation und ausgiebiges Testen lassen sich Implementierungsfehler
+aufdecken. Dazu ist es im Allgemeinen erforderlich, dass
+Hardware-Entwickler und der für die Verifikation beziehungsweise das
+Testen Zuständige verschiedene Personen sind. Dadurch lässt sich
+ebenfalls erneut feststellen, wie eindeutig und interpretationsfrei die
+Spezifikation erstellt worden ist. Durch die Fertigung eingebrachte
+Fehler müssen ebenfalls durch Qualitätstests beim Hersteller
+überprüft werden. Dies geschieht zum Beispiel durch elektrische Tests, wodurch
+sich Verbindungen und Ruhe- sowie Volllaststromaufnahme überprüfen
+lassen, was eine Aussage über die Funktionsfähigkeit der produzierten
+Schaltung erlaubt. Ebenso verringert die Verwendung von hochwertigen
+Werkstoffen und gut abgestimmten Fertigungsprozessen die
+Ausfallwahrscheinlichkeit.
+
+Nachdem die Hardware sich im Einsatz befindet, entspricht die
+graphische Darstellung der Ausfallwahrscheinlichkeit einer speziellen
+Kurve, der sogenannten Badewannenkurve. Es lässt sich feststellen,
+dass kurz nach Beginn des Betriebes eine hohe
+Ausfallwahrscheinlichkeit besteht, die dann mit der Zeit auf ein
+geringeres Maß absinkt. In dieser Zeit, oftmals auch als
+``burn-in-Zeit'' bezeichnet, fallen die Komponenten aus, die die
+Qualitätstests nur knapp bestanden haben oder von der angewandten
+Methode der Qualitätskontrolle nicht erfasst werden konnten. Danach
+schließt sich die Phase eines Betriebs mit relativ geringem
+Ausfallrisiko an. Sie zeichnet sich durch eine konstante Ausfallrate
+aus. Erreicht ein System das Ende der geplanten Lebensdauer, steigt
+die Ausfallwahrscheinlichkeit alterungsbedingt erneut an. Die verantwortlichen Effekte
+sind zum Beispiel Elektromigration oder thermisch bedingte,
+mechanische Störungen. Die typische ``Badewannenkurve'' ist in
+Abbildung \ref{fig:grundlagen_zuverlaessigkeit_badewannenkurve}
+dargestellt.
+
+\begin{figure}[htbp]
+	\centering
+        \includegraphics[width=0.7\textwidth]{pics/badewannenkurve}
+	\caption{Darstellung der Ausfallrate im Zeitverlauf}
+	\label{fig:grundlagen_zuverlaessigkeit_badewannenkurve}
+\end{figure}
+
+Insgesamt lassen sich folgende Arten von Fehlern unterscheiden:
+\begin{itemize}
+\item \textbf{permanente Fehler:} Komponentenaustausch erforderlich
+\item \textbf{zeitweilige Fehler:} treten wiederholt auf, da zumeist
+  strukturell begründet
+\item \textbf{vorübergehende (transiente) Fehler:} verschwinden nach kurzer
+  Zeit (Ursache meist Strahlungseinwirkung)
+\end{itemize}
+
+Die letzte Fehlerkategorie beinhaltet keine physikalischen Schäden an
+einer Komponente. Sie gehört deshalb zur Klasse der sogenannten
+``Soft Errors''. 
+
+\subsection{Soft Errors}
+\label{sec:grundlagen_soft_errors}
+
+Ein vorübergehender Fehler in einem Speichermedium oder einer
+Datenleitung  wird in der Regel als ``Soft Error'' bezeichnet. Er
+zeichnet sich dadurch aus, dass ein oder mehrere Bits innerhalb
+eines Speichers oder eine beziehungsweise mehrere Signalleitungen einen
+unvorhersehbaren Wert annehmen, häufig als ``Kippen'' bezeichnet. Das
+Vorhandensein eines ``Soft Errors'' erlaubt keine Rückschlüsse auf die
+Zuverlässigkeit eines Systems, einer Komponente oder einer digitalen
+Schaltung.
+
+\paragraph{Ursachen}\hspace{0cm}\\
+\label{sec:grundlagen_soft_errors_ursachen}
+Ursachen für ``Soft Errors'' sind fast immer kosmische oder
+terrestrische Strahlung, allerdings können sie auch durch extremes
+Übersprechen bei Signalleitungen auftreten. Es ist dabei zwischen
+Teilchenstrahlung, also geladenen Partikeln wie Elektronen, Protonen,
+schweren Ionen, und elektromagnetischer Strahlung, also
+Röntgenstrahlung, $\gamma$-Strahlung oder ultravioletter Strahlung, zu
+unterscheiden. Die ungeladenen hochenergetischen und thermischen
+Neutronen können nicht direkt, sondern nur durch beim Zusammenprall
+mit Atomkernen im Chip entstehende Sekundärpartikel oder -strahlung
+zu ``Soft Errors'' führen. J. F. Ziegler gelangte 1996 durch seine
+Arbeit bei der ``International Business Machines Corporation'' (IBM)
+zur Erkenntnis, dass nahezu 95~\% aller auf der Erde vorhandenen
+Strahlungspartikel, die in der Lage sind den regulären Betrieb einer
+digitalen Schaltung zu stören, energiereiche Neutronen
+sind \cite{ziegler1996b}.
+
+Für die Strahlenbelastung ist allerdings nicht nur die
+Umgebungsstrahlung am jeweiligen Standort entscheidend, sondern auch
+strahlende Verunreinigungen im Gehäuse eines Chips. 1978  entdeckte
+INTEL\TCop\ , dass ein hohes Maß der in produzierten DRAM-Modulen des
+Typs ``2107'' auftretenden ``Soft Errors'' durch vom Gehäusematerial
+abgegebene Alphastrahlung hervorgerufen wurde. Der Grund lag in der
+Verwendung von Wasser im Herstellungsprozess, welches flussabwärts
+einer alten Uranmine am Green River, Colorado gewonnen wurde. Das
+Wasser war radioaktiv genug, um das Gehäusematerial zu verunreinigen
+\cite{ziegler1996a}.
+
+Alphastrahlung, beziehungsweise Alphateilchen, bestehen aus einem zweifach
+ionisierten Heliumatom, es sind also insgesamt 2 Neutronen
+und 2 Protonen vorhanden ($\textstyle{{}^4_2\mathrm{He}^{2+}}$). Bekannte
+Alphastrahler sind ${}^{238}\mathrm{U}$, ${}^{235}\mathrm{U}$ und
+${}^{232}\mathrm{Th}$. Ein konkretes Beispiel für einen möglichen
+Alphazerfall ist: \[{}^{146}_{62} \mathrm {Sm} \to {}^{142}_{60}
+\mathrm {Nd} + {}^{4}_{2} \mathrm {He}  + 2{,}45\, \mathrm{MeV}\] Im
+Allgemeinen liegt die an ein Alphateilchen gebundene Energie im
+Bereich von 2 - \unit{5}{\mega\electronvolt}. Durch die große Masse
+sowie die elektrische Ladung können sie nur oberflächlich in Materie
+eindringen. Beispielsweise erlaubt ein Blatt Papier nahezu eine
+vollständige Abschirmung von Alphateilchen. Aus diesem Grund kann
+Alphastrahlung nur dann auf Siliziumstrukturen einwirken, wenn sie als
+Zerfallsprodukt in diesen entsteht (Neutronenwechselwirkung) oder sie
+durch unmittelbar angrenzendes Gehäusematerial emittiert wird. Nach
+dem Vorfall 1978 wurden verstärkt Bemühungen unternommen eine
+besondere Reinheit aller Materialien zu gewährleisten. Als
+Alphastrahlungsgrenzwert gilt für gewöhnlich
+$\unit{0,002}{\alpha\per\hour\usk\centi\meter\squared}$, welcher in
+gängigen Fertigungsprozessen generell unterboten wird. Das Teilproblem
+der durch das Gehäuse abgegebenen Alphastrahlung gilt deshalb
+heutzutage als gelöst.
+
+Energiereiche Partikel kosmischen Ursprungs können Protonen,
+Neutronen, Myonen (ähnlich des Elektrons, aber mit höherer Masse) oder
+Pionen (leichteste Mesonen) sein. Dabei  sind -- wie bereits erläutert
+-- energiereiche Neutronen die dominante Quelle für ``Soft
+Errors''. Elemente mit großem Neutronen-Wirkquerschnitt können
+Neutronen entweder einlagern (unelastischer Stoß) oder werden durch
+sie zur Spaltung gebracht (elastischer Stoß), wobei mittelschwere
+Nuklide entstehen, aber auch zusätzliche Neutronen freigesetzt werden
+können. Durch die veränderte Bindungsenergie der entstandenen
+Spaltprodukte wird Energie frei, die in Form von Strahlungsenergie
+($\alpha$-, $\beta$- oder $\gamma$-Zerfall) an die Umgebung abgegeben
+wird. Dabei verteilt sich die ursprüngliche kinetische Energie des
+Neutrons auf die freigesetzte Energie. Die Flussdichte der
+Neutronenstrahlung ist auf der Erde stark von geographischer Lage und
+vor allen Dingen von der Höhe über Normalnull abhängig. Für Rostock
+beträgt die Flussdichte in etwa \unit{14
+  \mathrm{~Neutronen}}{\per\hour\usk\centi\meter\squared}
+\cite{seutest}. In \unit{10}{\kilo\meter} Höhe, also in etwa der
+Dienstgipfelhöhe von Verkehrsflugzeugen, beträgt die Flussdichte
+hingegen bereits $\approx$ \unit{4021
+  \mathrm{~Neutronen}}{\per\hour\usk\centi\meter\squared}, ist also
+fast 300-mal so groß.
+
+Thermische Neutronen entstehen, wenn energiereiche Neutronen durch
+Kollisionen mit anderen Teilchen einen Großteil ihrer kinetischen
+Energie verloren haben. Sie können ebenfalls Kernspaltungen
+hervorrufen, sind aber ungemein zahlreicher als die hochenergetischen
+Neutronen. Das Bor-Isotop Bor-10 bietet für thermische Neutronen
+einen besonders großen Wirkungsquerschnitt \cite{baumann95}. Beim
+einsetzenden Zerfall bilden sich ein Alphapartikel, ein
+Lithium-7-Isotop sowie $\gamma$-Strahlung. Bor-10 wird in der
+Halbleiterindustrie in Form von Borsilikatglas als Isolator zwischen
+verschiedenen Metalllagen beziehungsweise -leitungen
+eingesetzt. Alternativ kann auch das Isotop Bor-11 verwendet werden,
+da dessen Neutronen-Wirkungsquerschnitt, also die Neigung Neutronen zu
+binden, wesentlich geringer ist.
+
+\paragraph{Wirkung/Effekt(e)}\hspace{0cm}\\
+\label{sec:grundlagen_softerrors_wirkung}
+Ein Maß, um die durch eine Strahlungsinteraktion in ein Material
+eingebrachte Energie quantifizieren zu können, ist der ``Linear Energy
+Transfer'', kurz LET, welche in
+$\frac{\unit{}{\kilo\electronvolt}}{\unit{}{\micro\meter}}$ oder
+$\frac{\unit{}{\mega\electronvolt\centi\meter\squared}}{\unit{}{\milli\gram}}$ 
+angegeben wird. Im Siliziumsubstrat eines Halbleiters, werden
+beispielsweise für jede \unit{3,6}{\electronvolt} vom Silizium
+aufgenommener Energie, ein Elektronen-Loch-Paar, also freie
+Ladungsträger, generiert. Diese können durch Vorhandensein eines
+elektrischen Feldes Ladungen transportieren und dadurch bereits
+vorhandene Ladungen kompensieren oder verstärken. 
+
+Der LET ist stark von Masse und Energie des eindringenden Partikels
+abhängig, jedoch auch vom umgebenden Material. Schwere,
+hochenergetische Partikel, wie zum Beispiel Alphateilchen oder schwere
+Ionen, haben für gewöhnlich den höchsten LET. Die auf die
+Eindringtiefe bezogene, eingebrachte Energie von Alphateilchen (He)
+und Lithium-Ionen -- Spaltprodukt aus Reaktion von Bor-10 und Neutron
+-- sowie Magnesium-Ionen -- Spaltprodult aus Reaktion eines
+hochenergetischen Neutrons und Silizium-Atomkernen -- sind in
+Abbildung \ref{fig:grundlagen_softerrors_letgraph} dargestellt. 
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.8\textwidth]{pics/let_distance}
+	\caption{Linear Energy Transfer (LET) in Abhängigkeit der
+          Ursprungsenergie und des Ursprungspartikels \cite{baumann2005b}}
+	\label{fig:grundlagen_softerrors_letgraph}
+\end{figure}
+
+Auffällig ist, dass das Magnesium-Ion einen bedeutend stärkeren
+Energieeintrag verursachen kann als das Alphapartikel oder das
+Lithium-Ion. Der Grund liegt in der entschieden höheren Masse des Magnesium-Ions.
+
+Eingebrachte Energie bleibt in Form von Ladung ($Q_{coll}$) vorhanden,
+die nur wenige Mikrometer vom Reaktionsort deponiert wird und liegt in
+etwa in einer Größenordnung von einem bis mehreren
+Hundert\unit{}{\femto\coulomb}. Überschreitet diese Ladung eine
+zellen- und technologiespezifische Grenzladung ($Q_{crit}$), kann eine
+Veränderung eines gespeicherten Datums die Folge sein. Dabei ist ein
+p-n-Übergang mit invertierter Vorspannung (Diode) besonders gefährdet,
+da es hier zum Lawinendurchbruch mit anschließendem Driftstrom kommen
+kann. Dieses Verhalten stellt die Hauptursache für strahlungsbedingte
+``Soft Errors'' dar \cite{baumann2005b}. Durch die steigende
+Integrationsdichte in der Halbleitertechnologie sinkt $Q_{crit}$
+kontinuierlich, denn sie ist primär das Produkt von Betriebsspannung
+und Gate-Kapazität einer Zelle.
+
+Ein weiterer Einflussfaktor ist die Betriebsfrequenz. Beispielsweise
+kann die Wie\-der\-her\-stel\-lungs- oder Auffrischungslogik innerhalb eines
+SRAMs bei niedrigerem Takt länger tätig sein und so eine veränderte
+Ladung wiederherstellen. Ebenfalls steigende Taktraten erschweren
+diese Möglichkeit jedoch zusehends.
+
+Aktuell sind in gängigen Technologien die Werte für $Q_{crit}$ so
+niedrig, dass es beim ``Einschlag'' eines Alphapartikels oder Neutrons
+in der Region fast immer zu einem SEU kommt. Durch die hohe
+Gatedichte sind aber häufig mehrere Gates betroffen, so dass für die
+neusten Nanotechnologien insgesamt ein Trend hin zum
+``Multi-Event-Upset'' entstanden ist.
+
+\subsection{Fehlermodelle}
+\label{sec:grundlagen_fehlermodelle}
+Auf Basis der vorangegangenen Überlegungen bezüglich der Auswirkungen
+von ionisierenden Strahlungen und allgemeinen Fehlern in digitalen
+Schaltungen, lassen sich verschiedene Fehlermodelle zu deren
+Charakterisierung unterscheiden. 
+
+Zunächst muss bestimmt werden, ob es sich um einen logischen oder
+nicht-lo\-gisch\-en Fehler handelt. Ein logischer Fehler verändert dabei
+einen Wert in sein Gegenteil, entspricht also dem sogenannten
+``Bitflip''. Der Ausfall des Taktsignals und eine mangelhafte
+Spannungsversorgung zählen dagegen zu den nicht-logischen
+Fehlern. Ebenfalls zu bestimmen ist die Ausbreitung oder Verbreitung
+eines Fehlers. Ein Fehler kann entweder lokal sein, das heißt nur eine
+einzige Variable beeinflussen oder aber eine ganze Region, also
+mehrere Variablen oder Werte. Als dritte Größe ist die Fehlerdauer zu
+unterscheiden, denn es kann sich um permanente, unregelmäßige oder
+vorübergehende Fehler handeln \cite[S. 12ff.]{lala1985}.
+
+Permanente Fehler haben ihren Ursprung häufig in fehlerhaften
+Signalverbindungen, zum Beispiel unterbrochene Kontakte, Kurzschlüsse
+oder Verbindungen mit Masse beziehungsweise der
+Betriebsspannung. Bekannte Fehlermodelle für diese Art von Fehlern
+sind:
+\begin{itemize}
+\item ``Stuck-at''-Fehler (Verbindung mit Masse oder Betriebsspannung)
+\item ``Stuck-open''-Fehler (unterbrochene Verbindung) und
+\item ``Bridging''-Fehler/Kurzschlüsse (Verbindung zwischen benachbarten Leitungen).
+\end{itemize}
+In der Regel werden diese Modelle zur Fehlersimulation auf
+Gatter-Ebene eingesetzt. Die Abbildung
+\ref{fig:grundlagen_fehlermodelle_stuckfehler} stellt die möglichen
+Fehler aus obiger Liste in konkreter Form dar.
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.6\textwidth]{pics/stuck_fehler}
+	\caption[Darstellung möglicher Fehler auf
+        Gatter-Ebene]{Darstellung möglicher Fehler auf Gatter-Ebene:
+          ``Stuck-open''-Fehler (1), ``Stuck-at''-Fehler (2),
+          ``Bridging''-Fehler (3)}
+	\label{fig:grundlagen_fehlermodelle_stuckfehler}
+\end{figure}
+
+Durch mangelhaftes Design können allerdings auch Hazards, Races oder
+Metastabilität in Flipflops entstehen, die als  unregelmäßige Fehler
+zu verstehen sind. Fehler aus der Kategorie der vorübergehenden Fehler
+werden durch die im Kapitel \ref{sec:grundlagen_soft_errors_ursachen}
+beschriebenen Auslöser verursacht. Sie sind nicht reparierbar, da kein
+eigentlicher Hardware-Defekt vorliegt. Stattdessen müssen sie durch
+geeignete Maßnahmen auf höheren Ebenen abgefangen werden.
+
+Wie bereits erläutert, können Fehler lokal oder verteilt
+auftreten. Man spricht dann zum Beispiel von ``single stuck-at'' oder
+multiplen, unidirektionalen, symmetrischen oder asymmetrischen
+Fehlern. Unter unidirektional ist zu verstehen, dass erzwungene 
+Wechsel eines oder mehrerer Signale zu einer Zeit immer nur in eine
+Richtung, dass heißt von logisch ``0'' zu logisch ``1'' oder logisch
+``1'' zu logisch ``0'' erfolgen kann, jedoch keine Kombination dieser
+Übergänge. Symmetrisch heißt, dass in einem Codewort Wechsel von
+logisch ``0'' zu logisch ``1'' und umgekehrt mit gleicher
+Wahrscheinlichkeit stattfinden. Als asymmetrisch sind die Fehler zu
+klassifizieren, die entweder nur 0-1-Wechsel oder nur 1-0-Wechsel
+innerhalb eines Codewortes bewirken, niemals jedoch beide. Dies gilt
+für unidirektionale Fehler innerhalb eines Codewortes nur zu einem
+bestimmten Zeitpunkt. Die Abbildung
+\ref{fig:grundlagen_softerrors_uni_sym_asym} stellt entsprechend der
+Fehlergruppe mögliche Veränderungen eines Datenwortes dar.
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=1.0\textwidth]{pics/unidirectional_symmetrical_asymmtrical}
+	\caption[Darstellung möglicher Veränderungen eines
+        Datenwortes]{Darstellung möglicher Veränderungen eines
+          Datenwortes (Unidirektional: 0-1- oder 1-0-Wechsel können
+          sich zeitlich abwechseln; Asymmetrisch: entweder 0-1- oder
+          1-0-Wechsel; Symmetrisch: 0-1- oder 1-0-Wechsel gleichwahrscheinlich)}
+	\label{fig:grundlagen_softerrors_uni_sym_asym}
+\end{figure}
+
+Um das einer Fehlersimulation beziehungsweise einer Absicherung
+gegenüber Fehlern zugrunde gelegte Fehlermodell zu charakterisieren,
+muss angegeben werden auf welcher Ebene die Betrachtung erfolgt. Das
+heißt, es muss festgelegt sein, ob es sich um logische oder
+nicht-logische Fehler handelt, welche Lokalität besteht, ob also
+beispielsweise Einzel- oder Mehrbitfehler auftreten und für welche
+Zeitdauer der Fehler besteht.
+
+\subsection{Schutz-/Gegenmaßnahmen}
+\label{sec:grundlagen_gegenmassnahmen}
+
+Es existieren diverse Techniken, um sich auf den verschiedenen Ebenen
+vor Fehlverhalten oder gar dem Ausfall einer digitalen Schaltung zu
+schützen. Da der Fokus der vorliegenden Arbeit nicht auf
+Halbleitertechnologie beziehungsweise dem Herstellungsprozess liegt,
+werden dort ansetzende Maßnahmen hier nicht betrachtet. Weiterhin
+sollen nur Methoden zur Absicherung gegen logische Fehler vorgestellt
+werden. Nicht-logische Fehler führen in der Regel zum generellen
+Systemversagen und können zur Laufzeit nur schwer abgewehrt
+werden. Logische Fehler haben effektiv Auswirkungen auf die korrekte
+Funktionalität einer Schaltung oder eines ganzen Systems. Um diesen zu
+begegnen, wird stets eine Art von Redundanz nötig. Redundanz kann in
+drei Dimensionen vorliegen, als 
+\begin{itemize}
+ \item Hardware-Redundanz (räumlich), 
+ \item Informations-Redundanz (informativ) oder
+ \item zeitliche Redundanz.
+\end{itemize}
+
+\paragraph{Hardware-Redundanz}\hspace{0cm}\\
+\label{sec:grundlagen_fehler_schutz_hwredundanz}
+Hardware-Redundanz stellt die wahrscheinlich simpelste, ergo auch am
+häufigsten eingesetzte, Form der Absicherung gegenüber Fehlern
+dar. Der Schutz wird hier durch zusätzlichen Hardware-Aufwand erreicht
+und besteht je nach Ausführung auch gegenüber nicht-logischen
+Fehlern. Die Redundanz kann dabei aktiv oder passiv vorliegen.
+
+Unter passiver oder auch statischer Redundanz versteht man die
+Vervielfältigung einer Komponente, welche eine bestimmte Operation
+ausführt. Bekannte Erscheinungsformen sind ``Double-'' oder ``Triple
+Modular Redundancy'' (DMR/TMR). Fehler werden hier nicht aktiv
+lokalisiert, sondern entweder passiv in Form einer Ergebnisdifferenz
+detektiert (DMR) oder durch einfaches Mehrheitswahlverfahren maskiert
+(TMR). Ein Fehler kann also lediglich zum Zeitpunkt der Ausführung,
+nicht jedoch vor- oder hinterher erkannt werden. Diese Möglichkeit
+bieten allerdings aktive Hardware-Redundanzmechanismen. Hier werden
+multiple Instantiierungen ein und derselben Komponente zeitmultiplext
+betrieben, wobei Fehler stets aktiv durch periodische (Selbst-)Tests
+(BIST), selbstüberprüfende Schaltungen oder sogenannte ``Watchdog
+Timer'' gesucht werden \cite[S. 168ff.]{lala2001}. Die
+aktive/dynamische Hardware-Redundanz verlangt aber im Fall eines
+entdeckten Fehlers nach einem Fehlerbehebungsmechanismus. In der Regel
+wird im Fehlerfall die aktuelle Komponenteninstanz als fehlerhaft
+markiert und die nächste, verfügbare Reserveinstanz für weitere
+Operationen verwendet. Durch periodische Selbsttests und/oder die
+Verwendung selbstüberprüfender Schaltungen ist es möglich Fehler
+innerhalb einer Komponente auch außerhalb deren Operationszeitraumes
+zu erkennen. Bei Verwendung von periodischen Selbsttests ist diese
+Komponente zum Testzeitpunkt jedoch nicht regulär einsetzbar. Die
+Abbildung \ref{fig:grundlagen_gegenmassnahmen_hw_redundanz} stellt die
+verschiedenen Ausprägungen von Hardware-Redundanz schematisch dar. 
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\textwidth]{pics/hw_redundanz}
+	\caption{Möglichkeiten für Hardware-Redundanz}
+	\label{fig:grundlagen_gegenmassnahmen_hw_redundanz}
+\end{figure}
+
+\paragraph{Informations-Redundanz}\hspace{0cm}\\
+\label{sec:grundlagen_fehler_schutz_informationsredundanz}
+Informations-Redundanz ist das Hinzufügen von redundanten
+Informationen zu den ursprünglich vorhandenen Daten
+\cite{johnson1989}. Fast immer werden spezielle Kodierungsschemata
+verwendet, um ein hohes Maß an Effektivität und/oder Effizienz zu
+erreichen. Ein Beispiel für die Nutzung von Informations-Redundanz ist
+das Vorhandensein von Prüfsummen in Netzwerkprotokollen (IP, Ethernet,
+etc.). Im Bereich der Kodierungstheorie wird unterschieden, ob es sich
+um einen separierbaren oder nicht separierbaren Code handelt. Ist der
+Code separierbar, ist es möglich die in einem Codewort vorhandenen
+Informationsbits unabhängig von den Prüfbits zu identifizieren
+\cite[S. 16]{lala2001}. Handelt es sich um einen nicht separierbaren
+Code, ist es notwendig das Codewort erst zu dekodieren, bevor die
+enthaltenen Informationen gelesen werden können. Aus diesem Grund
+werden separierbare Codes den nicht-separierbaren in der Regel
+vorgezogen.
+
+Eine simple Kodierung ist das Hinzufügen von
+Paritätsinformationen. Dazu wird die Anzahl der in einem
+Informationswort vorhandenen Einsen oder Nullen bestimmt und
+entsprechend der Kodierungsvorgaben durch Hinzufügen einer Eins oder
+einer Null auf eine gerade oder ungerade Anzahl hin
+erweitert. Erzeugung sowie Überprüfung von Paritätsinformationen sind
+durch XOR-Bäume leicht und kostengünstig realisierbar. Die
+Erkennungsrate richtet sich danach, wie das Verhältnis zwischen Anzahl
+von Informationsbits und Anzahl der Paritätsbits gewählt wird. Der
+häufig anzutreffende Kompromiss ist die Generierung eines Paritätsbits
+pro Datenbyte, wie es zum Beispiel beim seriellen
+Schnittstellenstandard EIA-232(RS-232) der Fall ist.
+Eine Erweiterung des Paritätsverfahrens stellt der ``Error Correction
+Code'' (ECC) dar, mit dessen Hilfe sich, je nach Beschaffenheit,
+Mehrbitfehler erkennen und Einzelbitfehler korrigieren lassen.
+
+Berger-Code und m-aus-n-Codes sind sehr gut geeignet, um alle
+unidirektionalen Fehler zu erkennen. Der Grund ist, dass kein
+unidirektionaler Fehler ein gültiges Codewort in ein ebenfalls
+gültiges überführen kann. Eine Kodierung mit m-aus-n-Codes wird
+ganzheitlich vorgenommen, ist also nicht separierbar,
+Berger-Code-Prüfbits hingegen schon.
+
+Die Beschaffenheit von \textbf{m-aus-n-Kodierungen} ist leicht aus dem
+Namen abzuleiten. Gültige Codewörter enthalten exakt $m$ Einsen und
+$(n-m)$ Nullen. Die Gesamtheit der verfügbaren Codewörter entspricht
+$\frac{n!}{(n-m)!m!}$, wobei entsprechende Codes dann optimal sind,
+wenn $m=\lfloor\frac{n}{2}\rfloor$ gilt. In diesem Fall ist die Anzahl
+der verfügbaren Codewörter relativ zur Anzahl der verwendeten Bits maximal. Ein Spezialfall entsteht dabei für
+$n=1$, das sogenannte ``One-Hot-Encoding''. Hier sind Kodierer/Dekodierer ohne größere Kosten in Hardware zu implementieren, da lediglich festgestellt werden muss, ob mehr als ein Bit gesetzt ist bzw. ein Bit gesetzt werden muss.
+
+Ein \textbf{Berger-Code} der Länge $n$ enthält $k$ Informationsbits
+und $c$ Checkbits, wobei gilt, dass $c=\lceil \log_2(k+1)  \rceil$ und
+$n=k+c$. Berger-Codes sind am wenigsten redundant und werden durch das
+Anhängen der Anzahl vorhandener Einsen in binärer Repräsentation
+erzeugt. Zuvor werden die Checkbits jedoch negiert. Für $k=0101001$
+und $c=\lceil \log_2(7+1)  \rceil = 3$ würde das Codewort
+$n=0101001101$ (vor Negation) beziehungsweise $n=0101001010$ gebildet
+werden.
+
+\textbf{Rest- oder Divisions-Rest-Codes} sind in die Klasse der
+arithmetischen Codes einzuordnen. Mit ihrer Hilfe lässt sich die
+Korrektheit eines Ergebnisses einer arithmetischen Operation
+bestimmen. Sie sind separierbar und entstehen bei der Division eines
+Informationswortes durch eine bestimmte Basis. Es gilt $N = Im + r$,
+wobei N die darzustellende ganze Zahl, $m$ die festgelegte
+Divisionsbasis und $I$ eine weitere ganze Zahl ist für die $0 \leq r
+\leq m$. Der Rest $r$ ist dann der Divisionsrest der Operation $r=
+N\mod m$. Die Anzahl der benötigten Checkbits bestimmt sich durch
+$\lceil log_2m  \rceil$ und ihr Wert ist mit dem entstehenden Rest
+identisch, also $c=N\mod m$. Lauten die Informationsbits
+beispielsweise $N=1110$ und $m$ ist mit $m=3$ festgelegt, so ergeben
+sich die Checkbits durch $c = (14\mod 3) = 2$ ($010$ in binärer
+Repräsentation). Das entstehende Codewort würde also $1110010$
+lauten. Wird $m$ zu $m=2^r-1$ mit $r \geq 2$ festgelegt, entsteht
+dabei die Klasse der sogenannten ``Low-cost Residue Codes'', die
+Einzelbitfehler besonders effizient erkennen
+\cite[S. 36ff.]{goessel1993}.
+
+Die letzte Familie von Codes, die hier vorgestellt werden soll, ist
+die der \textbf{zyklischen Codes}. Sie zeichnen sich dadurch aus, dass jedes
+zyklisch geschobene Codewort ein neues Codewort ergibt. Ein gültiges
+$(n,k)$-zyklisches Codewort ($k$ Informationsbits, $n-k$ Checkbits)
+muss ein Vielfaches eines Generatorpolynoms $G(X)$ des Grades $(n-k)$
+sein. Das Codewort einer Menge von Informationsbits lässt sich dabei
+durch Verkettung des Quotienten $Q(X)$ und des Divisionsrests
+$\frac{R(X)}{G(X)}$ bei Teilung des Informationswortes durch das
+Generatorpolynom $G(X)$ bilden. Dabei wird das Informations- oder
+Datenwort zunächst $(n-k)$ Stellen nach links verschoben, anschließend
+die Teilung durch das Generatorpolynom vorgenommen und der
+verbleibende Rest an das zu übertragende Datenwort
+angehängt. Bekanntestes Beispiel für den Einsatz zyklischer Codes ist
+der ``Cyclic Redundancy Check'' (CRC). Zu seiner Nutzung wurden für
+verschiedene Übertragungs- und Netzwerkprotokolle Generatorpolynome
+ausgewählt, die auch bei großen Datenwörtern Divisionsreste mit hoher
+Hamming-Distanz untereinander erzeugen, zum Beispiel das Polynom
+\verb#0x05# zur Datenkontrolle im ``Universal Serial Bus'' (USB) oder
+das Polynom \verb#0x04C11DB7# zur Prüfsummengenerierung bei der
+Übertragung von Ethernet-Datenrahmen.
+
+Die Tabelle \ref{tab:grundlagen_gegenmassnahmen_codes} fasst die
+vorgestellten Codes inklusive ihrer Eigenschaften zusammen.
+
+\begin{table*}[htbp]
+  \centering
+  \footnotesize
+  \caption{Übersicht über eine Auswahl fehlererkennender Codes}
+  \vspace{0.5cm}
+  \begin{tabular}{@{}p{2.2cm} r r r r r@{}}
+    \toprule
+    \textbf{Code} & Parität & m-aus-n & Berger & Divisionsrest &
+    zyklisch \\
+    \midrule
+    \textbf{Typ} & ungerade & One-Hot & nicht invertiert &
+    modulo 3 & $x^5+x^2+1$\\
+    \midrule
+    \textbf{Separierbar} & ja & nein & ja & ja & ja \\
+    \textbf{Anzahl Checkbits} & variabel & - & $\log_2\lceil(k+1)\rceil$
+    & $\lceil \log_2m \rceil$ & $=$Polynomgrad\\
+    \midrule
+    \textbf{Datenwort} & 1101 & 1101 & 1101 & 1101 & 1101 \\
+    \textbf{Checkbits} & 0 & - & 011 & 01 & 10 \\
+    \textbf{Codewort} & 11010 & 1000000000000 & 1101011& 110101 & 110110 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:grundlagen_gegenmassnahmen_codes}
+\end{table*}
+
+
+\paragraph{Anwendung im Bereich von Speichern/Datenpfaden}\hspace{0cm}\\
+Die Integrität von Daten bei der Ablage in Speichern erfolgt bevorzugt
+unter Nutzung des ECCs. Dazu werden beim Speichervorgang einzelner
+Datenworte parallel jeweils Prüfsummen erzeugt und abgelegt. Wird
+jetzt ein Datenwort, beispielsweise durch ein SEU, korrumpiert, fällt
+dies beim sich anschließenden Lesevorgang auf, da dieser eine
+ECC-Prüfung beinhaltet. Das ursprüngliche Datenwort lässt sich mit
+Hilfe der Prüfsumme wiederherstellen, sofern im Verhältnis zur Anzahl
+der Bitfehler ausreichend redundante Informationen vorhanden
+sind. Die 2009 aus der Zusammenarbeit der ``University of Toronto''
+und Google hervorgegangene Studie mit dem Titel ``DRAM Errors in the
+Wild: A Large-Scale Field Study'' \cite{schroeder09} überraschte mit
+der Erkenntnis, dass ``Soft Errors'' bei weitem nicht so häufig die
+Ursache für behebbare oder unbehebbare Fehler in ``registered DRAMs''
+sind, wie ursprünglich angenommen. Allerdings wurde auch festgestellt,
+dass sich die Rate von behebbaren Fehlern aufgrund von
+Alterungserscheinungen schon nach 10 bis 18 Monaten drastisch
+erhöht. Da viele Speicherriegel weitaus längere Standzeiten haben, ist
+der Einsatz von ECC zur Wahrung der Datenintegrität unabdingbar. Die
+Verwendung lediglich fehlererkennender Codes ist zwar vorstellbar,
+erfolgt aber nur, falls nicht ausreichend Kapazität zur Speicherung
+des Korrekturcodes vorhanden oder lediglich eine Fehlererkennung
+notwendig ist. In Frage kämen dann Paritätscodes oder zum Beispiel CRC.
+
+Um die Ergebnisse arithmetischer Operationen auf Korrektheit zu
+überprüfen, empfiehlt es sich "`mod 3"'-Codes zu nutzen, wie es Graf
+und Gössel empfehlen \cite{goessel1993}. Da diese jedoch eines nicht
+zu vernachlässigenden Hardwareaufwands bedürfen, kommen sie in der
+Regel nicht zum Einsatz.
+
+\paragraph{Kontrolllogik}\hspace{0cm}\\
+\label{sec:grundlagen_schutz_fsms}
+\label{sec:grundlagen_soft_errors_fsms}
+Die neben dem Datenpfad existente Kontrolllogik wird im Allgemeinen
+durch endliche Zustandsautomaten beziehungsweise ``Finite State
+Machines'' realisiert. Es handelt sich hierbei um ein
+Verhaltensmodell, welches auf der Grundlage von Zuständen und
+Zustandsübergängen basiert. Dabei existiert nur eine begrenzte, also
+endliche Menge von Zuständen, die der Automat annehmen kann. Der
+gegenwärtige Zustand wird durch die Verbindung von vergangenen
+Zuständen sowie Zustandsübergängen bestimmt, spiegelt also unter
+Umständen alle Veränderungen des Eingangs seit Systemstart wider
+\cite{booth1967}. Unter vorab definierten Bedingungen, also dem
+Anliegen bestimmter Eingangswerte, kann ein Wechsel aus einem Zustand
+heraus in einen anderen Zustand erfolgen. Dies wird als
+Zustandsübergang bezeichnet. Generiert der Automat dabei Ausgabewerte,
+handelt es sich um einen Transduktor. Hängt nun der von der
+Ausgabelogik der FSM generierte Ausgabewert sowohl vom
+augenblicklichen Zustand als auch von den Eingabewerten ab, wird dies
+als Mealy-Automat bezeichnet. Beim Moore-Automaten sind die
+ausgegebenen Werte allein vom gegenwärtigen Zustand abhängig. Ein
+Transduktor entspricht im mathematischen Modell dem 6-Tupel ($\Sigma,
+\Gamma, \text{S},\text{s0}, \delta, \omega$), wobei $\Sigma$ das
+nicht-leere Eingabealphabet, $\Gamma$ das nicht-leere Ausgabealphabet,
+S eine nicht-leere und endliche Menge von Zuständen, s0 der aus S
+entstammende Startzustand, $\delta$ die Zustandsübergangsfunktion
+$\text{S} \times \Sigma \rightarrow \text{S}$ und $\omega$ die
+Ausgabefunktion $\text{S} \times \Sigma \rightarrow \Gamma$ (Mealy)
+beziehungsweise $\text{S} \rightarrow \Gamma$ (Moore) darstellen.
+
+Im Wesentlichen gründet sich die gesamte Funktionalität also auf
+Grundlage des gegenwärtigen Zustands, der Zustandsübergangslogik und
+der Ausgabelogik. Um beispielsweise den Zustand vor der Auswirkung
+eines SEU zu schützen, könnte man diesen mittels eines geeigneten
+Kodierungsverfahrens kodieren. In Frage kommen zum Beispiel
+m-aus-n-Codes oder Berger-Codes, aber auch die Nutzung eines oder
+mehrerer Paritätsbits. Zustandsübergänge sind als fehlerhaft zu
+betrachten, wenn entweder Ausgangs- oder Folgezustand nicht aus der
+Menge möglicher Zustände (S) entstammen. Die Ausgabelogik sowie deren
+Produkt, der Ausgabewert oder auch -vektor, ließen sich mit Verfahren
+zum Schutz der Datenintegrität absichern. Beispielsweise wäre es
+möglich neben den eigentlichen Werten ein oder mehrere Paritätsbits zu
+erzeugen oder den gesamten Vektor in einen Berger-Code zu überführen.
+Davon bleibt die Möglichkeit zur Absicherung mittels
+Hardware-Redundanz unberührt.
+
+\section{Field Programmable Gate Arrays (FPGAs)}
+\label{sec:grundlagen_fpgas}
+FPGAs sind komplexe, integrierte Schaltkreise, die durch Konfiguration
+das Verhalten bestimmter logischer Schaltungen annehmen können. Sie
+vereinen die Vorteile der Hardwareimplementierung eines Algorithmus
+mit der Flexibilität der Programmierbarkeit, wodurch sie eine
+attraktive Plattform für die Entwicklung von Prototypen für
+anwenderspezifische integrierte Schaltkreise (ASICs) darstellen. Aber
+auch zur digitalen Signalverarbeitung im Rahmen des Mobilfunks lassen
+sie sich einsetzen. Durch die Rekonfigurierbarkeit bilden sie eine
+haltbare und langzeitig einsetzbare Plattform und können zudem dazu
+beitragen die Entwicklungszeit zu verringern, da keine Fertigung mehr
+erfolgen muss. Als Folge dessen sinken die Entwicklungskosten
+drastisch, da keine teuren Masken für lithographische Prozesse mehr
+erforderlich sind. Ab Stückzahlen von mehreren Zehntausend überwiegen
+allerdings die Anschaffungskosten für das FPGA, so dass hier in der
+Regel ASICs zum Einsatz kommen.
+
+Die Konfiguration eines FPGAs wird im sogenannten
+Konfigurationsspeicher (C\-RAM) abgelegt. Es handelt sich hierbei fast
+ausschließlich um SRAM. Nur wenige FPGAs basieren auf Alternativen,
+wie dem nichtflüchtigen FLASH-Speicher oder EE\-PROMs. Folglich
+``vergessen'' FPGAs ihre Konfiguration und somit auch ihre Funktion,
+wenn die Betriebsspannung abgeschaltet wird. Sie müssen deshalb nach
+dem Einschalten zunächst konfiguriert werden, um einsatzbereit zu
+sein. Der CRAM kann bei großen FPGAs eine Kapazität von bis zu 140
+MBit (EP4SGX290F) \cite{stratixfamily09} erreichen.
+
+\subsection{Aufbau eines FPGA}
+FPGAs beherbergen eine endliche Menge von Hardwareressourcen. Sie
+bestehen im Wesentlichen aus
+\begin{itemize}
+\item Lookup-Tabellen (LUTs)
+\item Flipflops
+\item Möglichkeiten zur Erzeugung verschiedener Takte (z.B. PLLs)
+\item Elementen digitaler Signalprozessoren, zum Beispiel
+  Multiplizierern
+\item fest verdrahtete, unveränderliche Schaltungen (Hard-Cores) mit
+  komplexen Funktionen, zum Beispiel Mikrocontrollern oder schnellen
+  I/O-Schnittstellen
+\item möglicherweise eingebettetem Speicher (Block RAM) und
+\item I/O-Blöcken, die eine (schnelle/hochfrequente) Kommunikation mit
+  der Umwelt ermöglichen.
+\end{itemize}
+
+Abbildung \ref{fig:grundlagen_fpgas_aufbauallgemein} stellt
+schematisch die Architektur sowie die vorhandenen Ressourcen eines
+fiktiven FPGAs dar.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{pics/fpga_simple_architecture}
+	\caption{Bestandteile einer fiktiven FPGA-Architektur}
+	\label{fig:grundlagen_fpgas_aufbauallgemein}
+\end{figure}
+
+Eine detailliertere Beschreibung der FPGA-Architektur soll am Beispiel
+des Al\-te\-ra\TReg\ Stra\-tix\TReg\ II GX -- einem Mittelklasse FPGA --
+vorgenommen werden. Er wurde 2005 unter Verwendung einer
+\unit{90}{\nano\meter}-Technologie eingeführt und verfügt über
+Hochgeschwindigkeitssendeempfänger mit einer maximalen
+Übertragungsrate von 6,375 Gbps. Dadurch
+können PCI Express, XAUI, Gigabit Ethernet und andere
+Kommunikationsprotokolle nativ genutzt werden. Weiterhin sind mehrere
+Multiplizierer in DSP-Blöcken sowie bis zu 8,34 Mbit
+interner Speicher integriert. 
+
+Die das Verhalten bestimmenden LUTs sind paarweise in sogenannte
+``Adaptive Logic Moduls'' (ALM) zusammengefasst. Zusätzlich enthält
+ein ALM zwei Flipflops und zwei Addierer \cite[S. 2-6 ff.]{stratixhandbook09}. Die Abbildung
+\ref{fig:grundlagen_fpgas_alm} stellt abstrakt die einzelnen
+ALM-Bestandteile sowie deren Verdrahtung untereinander dar. Acht ALMs
+bilden zusammen mit Spezialleitungen und einem lokalen Koppelblock
+einen ``Logical Array Block'' (LAB). Der Koppelblock verbindet dabei
+die einzelnen ALMs eines LABs mit einander \cite[S. 2-3
+ff.]{stratixhandbook09}. 
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\textwidth]{pics/alm_internal}
+	\caption[Aufbau eines ``Adaptive Logic Module'' der
+          Stratix\TReg\ II-Familie]{Aufbau eines ``Adaptive Logic Module'' der Stratix\TReg\ II-Familie \cite[S. 2-7]{stratixhandbook09}}
+	\label{fig:grundlagen_fpgas_alm}
+\end{figure}
+
+Untereinander werden diese LABs wiederum durch große
+Verbindungsleitungen verknüpft, die rasterförmig angeordnet sind. An
+den Kreuzungspunkten dieser Leitungen liegen Verbindungsmatrizen,
+beziehungsweise Switches, die entsprechend ihrer Programmierung
+Verbindungen zwischen einzelnen Signalleitungen herstellen. 
+Die Abbildung \ref{fig:grundlagen_fpgas_labs} zeigt das
+Verbindungsraster sowie die eingebetteten LABs bzw. ALMs.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\textwidth]{pics/labs_edit}
+	\caption{ALMs, LABs und deren Verbindung im FPGA }
+	\label{fig:grundlagen_fpgas_labs}
+\end{figure}
+
+Die in den ALMs doppelt vorhandenen LUTs können durch ihre sechs
+Eingänge insgesamt 64 verschiedene logische Funktionen nachbilden, es
+müssen allerdings nicht alle Eingänge verwendet werden. Die
+Konfiguration einer LUT ist, wie alle anderen Konfigurationsdaten, im
+CRAM abgelegt. Logisch betrachtet sind alle 64 Bit Eingangsdaten für
+insgesamt $2^{64}-1$ Multiplexer, deren Steuerung über die sechs
+Eingänge erfolgt. Die Abbildung \ref{fig:grundlagen_fpgas_lut}
+veranschaulicht diesen logischen Aufbau für eine LUT mit zwei
+Eingängen.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.4\textwidth]{pics/lut}
+	\caption{Logischer Aufbau einer LUT mit zwei Eingängen}
+	\label{fig:grundlagen_fpgas_lut}
+\end{figure}
+
+Auch die verbleibenden Elemente wie DSP-Blöcke, Hard-Cores,
+I/O-Blöcke oder eingebettete Speicher beziehen ihre
+Konfigurationsinformationen aus dem CRAM. Ihre Funktionsweise ist den
+zu den verschiedenen FPGAs verfügbaren Handbüchern zu entnehmen und
+soll hier nicht erläutert werden.
+
+\subsection{Auswirkungen von Strahlung auf FPGAs}
+\label{sec:fpga_seu}
+
+FPGAs sind wie alle anderen integrierten Schaltkreise ebenfalls
+terrestrischer und atmosphärischer (kosmischer) Strahlung
+ausgesetzt. Dabei ist vor allen Dingen der CRAM bzw. dessen Inhalt,
+die FPGA-Konfiguration, gefährdet. Kommt es hier zu einem SEU oder
+MEU, kann dies unmittelbare Auswirkungen auf das Verhalten des FPGAs
+haben. Ein weiteres Problem ist, dass ein strahlungsverursachter
+Fehler in der Konfiguration nicht unbedingt von vorübergehender Natur
+sein muss, wie es fast immer beim ASIC der Fall ist. Im ASIC sind
+entweder kombinatorische oder sequentielle Logik
+betroffen. Kombinatorische Logik kann dahingehend manipuliert werden,
+dass durch vorübergehend falsch anliegende Eingabedaten falsche
+Ausgabewerte erzeugt werden, falls dieser Logikteil sich in Benutzung
+befindet. Ist
+sequentielle Logik betroffen, wird unter Umständen bis zum nächsten
+Überschreiben ein falscher Wert gehalten. Diese Möglichkeiten bestehen
+beim FPGA ebenfalls, jedoch existiert noch eine weitere. Durch eine
+(permanent) veränderte Konfiguration kann sich das Verhalten von
+kombinatorischer und sequentieller Logik ändern. Dabei lassen sich je
+nach betroffener Ressource drei verschiedene Arten von SEUs aufgrund
+ihrer Wirkung unterscheiden:
+
+\begin{enumerate}
+\item \textbf{Fehler in der Wahrheitstabelle einer LUT:} Die logische
+  Funktion der betroffenen LUT verändert sich. Im Betrieb kann sich
+  dies auf das Gesamtverhalten einer Komponente auswirken, allerdings
+  lässt sich keine generelle Aussage über die zu erwartenden
+  Konsequenzen treffen, da diese verhaltens- und designabhängig
+  sind. Fehler dieser Kategorie lassen sich mit herkömmlichen
+  Fehlermodellen nur auf Gatter-, nicht jedoch auf Logikebene (RTL)
+  beschreiben.
+\item \textbf{Fehler im routingspezifischen Teil der Konfiguration:}
+  Es können bestehende Signalverbindungen unterbrochen oder neue
+  Signalverbindungen hergestellt werden. Als Folge können
+  beispielsweise Kurzschlüsse entstehen oder Rechenergebnisse durch
+  Ausbleiben eines bestehenden Übertrags (``carry in'') verfälscht
+  werden. Eine Modellierung dieser Fehler kann wie im ASIC-Umfeld als
+  ``stuck-at''-, ``stuck-open''- oder ``bridging''-Fehler
+  erfolgen. Eine physische und somit permanente Beschädigung des FPGAs
+  ist möglich.
+\item \textbf{Fehler in sequentieller Logik oder Speicherelementen:}
+  Hierbei wird ein gespeichertes Datum manipuliert. Dieser Fehler
+  ist zu dem im ASIC auftretenden identisch und kann durch bestehende
+  Fehlermodelle auf Logikebene modelliert werden. 
+\end{enumerate}
+
+Bedingung für die Einflussnahme aller strahlungsbedingten Fehler ist,
+dass sie in einem tatsächlich verwendeten Bereich auf dem FPGA
+auftreten (geometrische Voraussetzung). Ebenso kann es nur zu dem
+Zeitpunkt zu einer Offenbarung kommen, in dem die betroffene
+Komponente eine Funktion ausführt.
+
+Ungefähr 80~\% der Konfiguration sind für die Kontrolle des Routings
+zuständig. Der Rest regelt das Verhalten der kombinatorischen
+Elemente sowie der als Hard-Core vorhandenen Komponenten.
+
+Um korrupte Daten im CRAM entdecken zu können, bietet das beschriebene
+FPGA eine auf CRC basierende Lösung an. Nachdem die
+Konfigurationsdatei (``bit file'') erzeugt worden ist, generiert das
+FPGA mit Hilfe des CRC-Verfahrens eine Prüfsumme der
+Konfiguration und speichert diese in einem speziellen Bereich des
+Konfigurationsspeichers. Im laufenden Betrieb kann nun kontinuierlich
+eine Prüfsummenbildung über die gespeicherte Konfiguration
+erfolgen. Dieser Prozess läuft automatisiert im Hintergrund
+ab. Stimmen generierte und gespeicherte Prüfsumme nicht überein, muss
+ein Fehler aufgetreten sein.
+
+Da bei Altera\TReg\ FPGAs der Konfigurationsspeicher in Rahmen
+organisiert ist, existiert für jeden Rahmen eine solche Prüfsumme auf
+Basis eines 16 Bit CRC-Codes. Allerdings existiert eine
+Maximalfrequenz, mit der diese Art der Überprüfung stattfinden
+kann. Beim vorgestellten Stratix\TReg\ II GX beträgt sie
+\unit{100}{\mega\hertz}, wodurch die maximale Zeit zur Überprüfung des
+gesamten Konfigurationsspeichers \unit{59}{\milli\second} beträgt
+\cite[S. 10]{altera_an357}. Wird das FPGA ebenfalls mit einer Frequenz
+von \unit{100}{\mega\hertz} betrieben, vergehen maximal 5.900.000
+Takte bis zur vollständigen Überprüfung der gesamten Konfiguration. Innerhalb dieser Zeit kann bereits eine Vielzahl von entscheidenden Operationen stattgefunden haben, weswegen dieses Verfahren keinen ausreichenden Schutz vor Fehlern bietet.
+
+
+\subsection{Fehlerinjektion in FPGAs}
+\label{sec:grundlagen_fpgas_fehlerinjektion}
+
+Um auf möglichst realistische Art und Weise zur Laufzeit auftretende
+strahlungsbedingte Fehler zu simulieren, ist es notwendig Tests in
+einer radioaktiven Umgebung durchzuführen. Dazu existieren spezielle
+Strahlungskammern in verschiedenen Laboratorien, wie zum Beispiel dem
+deutschen Elektronensynchrotron in Hamburg-Bahrenfeld. Dort werden die
+zu testenden FPGAs personalisiert und in einen speziellen Testaufbau
+eingebracht. Je nach gewünschter Bestrahlungsart kommen daraufhin
+Ion\-en\-ka\-no\-nen/Plas\-ma\-trons,
+Teilchenbeschleuniger (Neu\-tro\-nen\-strah\-lung/Al\-pha-Strah\-lung/Elek\-tro\-nen\-strah\-lung)
+oder Zy\-klo\-tro\-ne/Syn\-chro\-tro\-ne (E\-lek\-tro\-nen\-strah\-lung) zum Einsatz. Der
+schwerwiegende Nachteil sind die bei Nutzung derartiger Einrichtungen
+entstehenden Kosten. Weiterhin ist es schwierig bis unmöglich gezielt
+einzelne Elemente des FPGAs der Bestrahlung auszusetzen. Allerdings
+verspricht dies realistischere Ergebnisse, da zur regulären Laufzeit
+die einwirkende Strahlung ebenfalls zufällig über die gesamte
+Oberfläche des FPGAs verteilt ist.
+
+Eine Alternative zur gezielten Bestrahlung mit Alphapartikeln ist das
+Einbringen eines Alphastrahlers in das Gehäuse des FPGAs. Da hierfür
+zunächst das Gehäuse geöffnet werden muss, um die strahlende Substanz
+einzubringen, ist die Kooperation des FPGA-Herstellers eine zwingende
+Voraussetzung. Das auf diese Weise von der IBM\TReg\ 2009 in
+Poughkeepsie durchgeführte Experiment offenbarte jedoch, dass die
+erreichte Fehlerrate mit $\approx$ 0,4 Fehlern pro Stunde äußerst
+gering ist. Zudem entstehen auch mit dieser Methode signifikante
+Kosten. Ein weitaus schwerwiegenderer Nachteil ist jedoch, dass mit
+radioaktiven Substanzen gearbeitet wird, was potentielle Gefahr für
+involvierte Ingenieure bedeutet und aus diesem Grund eine Fülle von
+Sicherheitsmaßnahmen erforderlich macht.
+
+Durch die dynamische Rekonfigurierbarkeit moderner FPGAs existiert
+eine weitere Möglichkeit Fehler zur Laufzeit in das Design zu
+injizieren. Dazu müssen zunächst zu testende Komponenten logischen
+Partitionen innerhalb des FPGAs zugewiesen werden. Daraufhin wird das
+FPGA regulär personalisiert und das programmierte Design führt seine
+Funktion aus. Nach einer frei wählbaren Zeit kann nun eine der
+entsprechenden Partitionen im Betrieb rekonfiguriert werden. Hierbei
+muss lediglich die zu rekonfigurierende Partition den Betrieb
+einstellen, weswegen man von dynamischer, partieller
+Rekonfigurierbarkeit spricht.
+Diese Methode hat neben dem Vorteil des dynamischen Ansatzes und der
+Unterstützung durch die Herstellersoftware den Nachteil, dass das FPGA
+dieses Verfahren unterstützen muss. Der führende Hersteller im
+FPGA-Bereich -- Xilinx\TReg\ -- hat "`partial dynamic reconfiguration"'
+2006 für die Plattformen Virtex II Pro und Virtex 4 eingeführt und es
+fortan in jede weitere Generation der Virtex-Serien-FPGAs
+integriert. Altera, der zweitgrößte Hersteller von FPGAs, bietet
+gegenwärtig keine Möglichkeit zur Rekonfiguration im laufenden Betrieb
+an. Will man die Fähigkeit zur dynamischen partiellen Rekonfiguration
+nutzen, bindet man sich im Augenblick zwangsläufig an
+Xilinx\TReg .
+
+Ein weiterer Nachteil ist die Rate der injizierbaren Fehler. Pro
+Rekonfigurationsvorgang lassen sich ein bzw. mehrere Fehler ins Design
+einbringen. Jedoch erfolgt die Rekonfiguration für gewöhnlich über
+eine relativ langsame Schnittstelle wie JTAG, was
+lediglich Rekonfigurationszeiten im Mikro- bis Millisekundenbereich erlaubt.
+
+\section{Ethernet}
+Unter Ethernet wird eine kabelgebundene Netzwerktechnik verstanden,
+die zur Rechnerkommunikation verwendet wird. Sie hat ihren Ursprung in
+einem 1976 von Robert M. Metcalfe und David R. Boggs veröffentlichten
+Artikel, die damals beide am Xerox Palo Alto Research Center (PARC)
+arbeiteten \cite{metcalfe1976}. Ethernet leitete sich aus dem bereits
+existierenden ALOHAnet ab und war zur Verwendung in lokalen Netzwerken
+-- ``Local Area Networks'' (LANs) -- vorgesehen. 
+
+Der vom Institute of Electrical and Electronics Engineers (IEEE) 1980
+erstmals verabschiedete Standard IEEE 802 enthält Spezifikationen für
+Ethernet und wird auch heute noch weiterentwickelt. Ethernet ist im
+ISO/OSI-Schichtenmodell in die Schicht 2, also die Sicherungsschicht,
+und Schicht 1, die Physikalische Schicht, einzuordnen, da beide
+innerhalb von IEEE 802 spezifiziert sind (siehe Abbildung
+\ref{fig:grundlagen_ethernet_osi}) \cite[S. 38 ff.]{norris2002}.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{pics/ethernet_iso_osi}
+	\caption[Architekturelle Einordnung von
+        Ethernet]{Architekturelle Einordnung von Ethernet: Medium
+          Independent Interface (MII), Physical Coding Sublayer (PCS),
+          Physical Medium Attachment (PMA), Physical Medium Dependent
+          (PMD), Medium Dependent Interface (MDI)}
+	\label{fig:grundlagen_ethernet_osi}
+\end{figure}
+
+\subsection{Aufbau und Einordnung}
+\label{sec:grundlagen_ethernet_aufbau}
+
+%\paragraph{Interner Aufbau/Ethernetschichten}\hspace{0cm}\\
+\label{sec:grundlagen_ethernet_funktionsweise_interneraufbau}
+Der Standard IEEE 802.3 definiert gemäß ISO/OSI zwei Schichten, die
+Datensicherungsschicht und die physikalische Schicht, ist intern
+jedoch feiner gegliedert. Innerhalb der Datensicherungsschicht wird
+weiter zwischen ``Logical Link Control'' (LLC), ``Media Access Control
+Control'' (MAC Control) und ``Media Access Control'' (MAC)
+unterschieden. Die Zusammensetzung der physikalischen Schicht hat sich
+mit der Evolution des Standards ebenfalls verändert. Bestand sie
+anfangs lediglich aus einem ``Physical Layer Signaling'' (PLS),
+welches über das ``Attachment Unit Interface'' (AUI) mit dem
+``Physical Medium Attachment'' (PMA) verbunden war und das PMA
+wiederum über das ``Medium Dependent Interface'' die Verbindung zum
+eigentlichen Medium herstellte, verfügt sie heute über zwei zusätzliche
+logische Funktionsblöcke.
+
+Der PLS-Block wurde durch den
+``Reconciliation Layer'' (zu deutsch: ``Abgleichschicht'') ersetzt und
+ist durch das ``Medium Independent Interface'' (xMII) mit dem
+``Physical Coding Sublayer'' (PCS) verbunden, welches die 8 Bit breiten Eingangswörter in 10 Bit breite Codewörter umformt. Dadurch wird die Robustheit gegenüber Übertragungsfehlern erhöht und der Gleichspannungsteil im Laufe der Übertragung nahe Null gebracht.
+Das ``x'' in ``xMII'' für die verschiedenen Ausprägungen des MIIs bei Datenraten
+von mehr als 100 Mb/s steht, zum Beispiel Gigabit MII (1 Gb/s) oder
+XGMII (10 Gb/s) und ähnliche. 
+
+Das weiterhin vorhandene PMA ist direkt
+mit dem PCS und verbunden, woran sich das ``Physical Medium
+Dependent'' (PMD) anschließt. Die 10 Bit breiten Codewörter aus dem PCS werden im PMA serialisiert und durch das PMD in medienspezifische Signale (Spannung/Lichtstärke) umgesetzt.
+
+Die Verbindung zwischen PMD und dem
+Medium erfolgt weiterhin durch das MDI. Durch den Standard IEEE
+802.3 definierte Schichten beziehungsweise Funktionsblöcke und
+Schnittstellen sind in der Abbildung \ref{fig:grundlagen_ethernet_osi}
+dargestellt.
+
+Der Einsatz des MIIs, beziehungsweise seiner Varianten GMII und XGMII,
+ermöglicht die Verwendung eines externen PHYs. Ist dieses
+verhältnismäßig weit vom MAC-Block entfernt, kann das entsprechende
+MII durch die Verwendung des AUI, besser gesagt das 10 Gigabi t AUI
+(XAUI), ``verlängert'' werden. Es kommt vor allem bei der Integration
+auf Netzwerkadaptern zum Einsatz und verbindet physikalisch getrennte
+Chips miteinander.
+
+\subsection{Übertragungsformat(e)}
+%\label{sec:grundlagen_ethernet_funktionsweise}
+%\paragraph{Übertragungsformat(e)}\hspace{0cm}\\
+\label{sec:grundlagen_ethernet_datenrahmen}
+Die Datenübertragung erfolgt auf Basis von Datenpaketen. Dabei enthält
+jedes Datenpaket einen Datenrahmen, sieben Präämbelmuster und einen
+sogenannten ``Start-of-Frame-Delimiter''(SFD), welcher die Ankündigung
+eines folgenden Datemrahmens abschließt. Übertragen werden die Daten
+dabei jeweils mit dem niederwertigsten Bit (LSB) beginnend, so dass
+das Präambelmuster 0x55 ($01010101_b$), als $10101010_b$, also 0xAA
+versendet wird.
+
+Ein Datemrahmen besteht mindestens aus:
+\begin{itemize}
+\item Zieladresse (6 Byte)
+\item Absendeadresse (6 Byte)
+\item Typ-/Längenfeld (2 Byte)
+\item Nutzdaten (0 - 1500 Byte)
+\item Frame Check Sequence (4 Byte),
+\end{itemize}
+
+wobei die Mindestlänge mit 64 Byte spezifiziert ist, was
+bedeutet, dass das Nutzdatenfeld unter Umständen durch das Anfügen von
+Füll- oder Polsterbytes (``padding bytes'') bis auf eine Mindestlänge
+von 46 Byte erweitert werden muss \cite[S. 76]{rech2008}.
+
+Wie bereits erläutert geht jedem Datenrahmen ein bestimmtes
+Ankündigungsmuster voraus, die Präambel. Sie besteht aus der
+siebenfachen Wiederholung des Musters 0x55. Der anschließende SFD
+(0xD5) zeigt den unmittelbaren Beginn eines Datenrahmens an.
+
+Jede MAC-Adresse besteht aus vier Teilen. Das niederwertigste Bit gibt
+an, ob es sich um eine Individual- oder Gruppenadresse handelt und wird
+daher auch als I/G-Bit bezeichnet. Ist es gesetzt, handelt es sich um
+eine Gruppenadresse. An Gruppenadressen können "`Broadcasts"', also Rundnachrichten, oder "`Multicasts"', also Nachrichten für Teilnehmer einer Gruppe, gerichtet sein, wobei die Adresse 0xFFFFFF als Adresse für "`Broadcasts"' reserviert ist.
+
+Das zweitniederwertigste Bit zeigt an, ob die
+MAC-Adresse global oder nur lokal verwaltet wird. Eine MAC-Adresse
+gilt als global verwaltet, falls sie der ursprünglich vom Hersteller 
+einprogrammierten MAC-Adresse entspricht. Diese besteht zur Hälfte aus
+einem herstellerspezifischen Teil, welcher Herstellern von
+E\-ther\-net-Netz\-werk\-a\-dap\-tern vom IEEE zugewiesen wird, und einer
+Hälfte, die vom Hersteller festgelegt wird.
+
+Die Doppelbedeutung des Typ-/Längenfeldes ist historisch begründet. In
+der ursprünglich von DEC\TReg, Intel\TReg\ und Xerox\TReg\
+entwickelten Version I von Ethernet, sollte das 16-Bit-Feld die Länge
+des sich anschließenden Nutzdatenfeldes anzeigen. Da die Maximallänge
+durch IEEE 802.3 mit 1500 Byte fixiert ist und eine bitgenaue
+Übertragung erfolgt, kann auf eine Längenangabe verzichtet werden. In
+der zweiten Version identifiziert das entsprechende Feld nun den Typ
+der enthaltenen Nutzdaten. Ein hexadezimaler Wert von 0x800 zeigt zum
+Beispiel an, dass es sich bei den Nutzdaten um ein ``Internet
+Protocol'' (IP)-Paket handelt.
+
+Um den Datenrahmen gegenüber Übertragungsfehlern abzusichern und die
+Integrität der transportierten Daten zu gewährleisten, schließt sich
+an das Nutzdatenfeld die sogenannte ``Frame Check Sequence'' (FCS)
+an. Sie lässt sich mittels CRC-Verfahren und dem Genratorpolynom
+0x04C11DB7 errechnen und umfasst dabei jedes Byte zwischen SFD und
+letztem Nutzdaten- oder Füllbyte. Abbildung
+\ref{fig:grundlagen_ethernet_ethernet_frame} zeigt den gesamten
+Ethernet-Datenrahmen inklusive aller vorhandenen Felder.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\linewidth]{pics/ethernet_frame_bar}
+	\caption{Format für Ethernet-Datenrahmen/-Datenpaket nach IEEE 802.3}
+	\label{fig:grundlagen_ethernet_ethernet_frame}
+\end{figure}
+
+Die Endianness, das heißt die Bytereihenfolge, ist dabei vom
+übertragenen Feld abhängig. Während beide Adressen sowie die Nutzdaten
+mit dem untersten Byte beginnend in aufsteigender Reihenfolge
+(``Little-Endian'') übertragen werden, wird das Typ-/Längenfeld in
+umgekehrter Reihenfolge versendet. Die Zieladresse 0x0\-1\-2\-3\-4\-5\-6\-7\-8\-9\-A\-B würde
+folglich als 0xAB8967452301 versendet, der Typ 0x0800 unverändert als
+0x0800. 
+
+\subsection{Übertragungsablauf}
+\label{sec:grundlagen_ethernet_funktionsweise}
+\label{sec:grundlagen_ethernet_kommunikationsablauf}
+%\paragraph{Übertragungsvorgang}\hspace{0cm}\\
+Es lassen sich verschiedene Betriebsmodi unterscheiden, die auch im
+Rahmen von IEEE 802.3 spezifiziert sind.
+Bei der gerichteten Übertragung, auch als Simplex-Betrieb bekannt,
+können Informationen nur in eine Richtung übertragen werden (Fernseh-
+und Radiofunk). Halb- oder Semiduplex-Betrieb liegt vor, wenn zwar in
+beide Richtungen, nicht jedoch gleichzeitig übertragen werden kann
+(``Walkie-Talkie''). Die Kommunikation erfolgt dann
+zeitmultiplext. Die zeitliche Einschränkung entfällt beim
+Duplex-Betrieb, da hier unabhängige Kommunikationskanäle vorhanden
+sein müssen.
+
+Wird ein gemeinsames, geteiltes Medium zur Kommunikation eingesetzt
+(Bus), kann maximal ein Halbduplex-Verfahren eingesetzt werden, um
+eine störungsfreie Übertragung zu gewährleisten. Existiert keine
+Prioritätsregelung, wie zum Beispiel in Ethernet-basierten Netzwerken,
+muss ein Netzwerkteilnehmer vor Übertragungsbeginn sicherstellen, dass
+das Medium verfügbar ist. Hat unabhängig davon ein weiterer Teilnehmer
+zum gleichen Zeitpunkt die Prüfung durchgeführt und beginnt ebenfalls
+zu senden, kommt es zur Kollision. Diese muss durch stetiges
+``Mithören'' beim eigenen Sendevorgang festgestellt werden, woraufhin
+alle betroffenen Teilnehmer den Sendevorgang abbrechen und eine
+zufällige Zeitspanne warten, bevor sie den nächsten
+Übertragungsversuch beginnen. Aufgrund der endlichen
+Ausbreitungsgeschwindigkeit im Medium müssen Datenrahmen die
+beschriebene Mindestlänge von 64 Byte aufweisen. Erst dadurch ist es in Verbindung mit einer maximalen Segmentlänge von 100 Metern möglich, eine Störung vom entferntesten Punkt im Medium zu erfassen,
+bevor die laufende Übertragung abgeschlossen wird.
+
+Das vorgestellte Verfahren wird als ``Carrier Sense Multiple
+Access/Collision Detection'' bezeichnet und findet seine Anwendung in
+IEEE 802.3-kompatiblen Netzwerken.
+
+Damit sich Teilnehmer auf den Empfang eines weiteren Datenpakets
+vorbereiten können, muss nach Vollendung der Übertragung eine
+bestimmte Zeit gewartet werden. Diese Zeitspanne wird als ``Inter
+Packet'' oder ``Inter Frame Gap'' (IPG/IFG) bezeichnet und beträgt 96
+Bitzeiten (Bitzeit: zur Übermittlung eines Bits benötigte Zeit),
+beziehungsweise 12 Bytezeiten.
+
+\subsection{VLAN-Erweiterung}
+
+%\paragraph{VLAN-Erweiterung}\hspace{0cm}\\
+\label{sec:grundlagen_ethernet_vlan}
+Um physikalisch bestehende Netzwerke logisch in Teilnetze zu gliedern,
+lassen sich ``Virtual Local Area Networks'' (VLANs)
+einrichten. Dadurch ist eine Netzwerkzuordnung nicht mehr zwingend vom
+Standort eines Gerätes abhängig. Zusätzlich kann die
+Netzwerksicherheit erhöht werden. Die Zugehörigkeit wird dabei auf
+Port- oder Markierungsbasis festgelegt, wobei letzteres
+aufgrund einer größeren Hardwareunabhängigkeit vorzuziehen ist. Ein
+Standard, der eine Möglichkeit zur Einrichtung von VLANs definiert ist
+IEEE 802.1Q \cite{vlan2005}. Er spezifiziert ein zusätzliches 4 Byte
+umfassendes Feld, das in versendete IEEE 802.3-Datenrahmen eingefügt
+werden kann, um sie einem VLAN zuzuordnen. 
+
+Die 16 Bit bilden dabei den ``Tag Protocol Identifier'' (TPID), dessen
+Wert immer 0x8100 ist. Die nächsten drei Bit werden als ``Priority Code
+Point'' bezeichnet und geben Auskunft über die Priorisierung des
+Datenrahmens. Es folgt das Bit ``Canonical Format Identificator''
+(CFI), welches das Adressformat der enthaltenen MAC-Adressen
+bestimmt und aus Kompatibilitätsgründen (Token Ring) eingeführt worden
+ist. Die VLAN-Zugehörigkeit wird durch den 12 Bit umfassenden ``VLAN
+Identifier'' (VID) angezeigt. 
+
+Da das Einfügen der VLAN-Markierung keinen Einfluss auf den markierten
+Datenrahmen haben soll, wurde die maximale Datenrahmenlänge auf 1522
+Byte erhöht, falls eine solche Markierung vorhanden ist. Dadurch wird
+die Gliederung in VLANs transparent. Der erweiterte Datenrahmen ist in
+Abbildung \ref{fig:grundlagen_ethernet_frame_vlan} dargestellt.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1.0\linewidth]{pics/ethernet_frame_bar_vlan}
+	\caption{Datenrahmen mit IEEE 802.1Q-Erweiterung}
+	\label{fig:grundlagen_ethernet_frame_vlan}
+\end{figure}
+
+\subsection{Flusskontrolle}
+%\paragraph{Flusskontrolle}\hspace{0cm}\\
+\label{sec:grundlagen_ethernet_flowcontrol}
+Innerhalb eines Vollduplex-Netzwerkes kann es vorkommen, dass ein
+E\-ther\-net\--Switch nicht mehr in der Lage ist ankommende Pakete in
+lokalen Puffern unterzubringen. Dies muss er seinem
+Kommunikationspartner mitteilen. Ein Mechanismus zur Realisierung
+dieser Flusskontrolle ist durch IEEE 802.3x definiert
+\cite[S. 741ff. (Annex 31B)]{ieee802_3}.
+
+Mittels sogenannter MAC-Kontrollrahmen, die den Typ ``0x0001'' tragen,
+lassen sich Steuerungsbefehle versenden. Um eine Übertragungspause
+festzulegen, wird eine von Null verschiedene Pausenzeit in einem
+speziellen MAC-Kontrolldatenrahmen festgelegt und dieser an die
+Multicast-MAC-Adresse 01-80-C2-00-00-01 übertragen. Die Gegenseite
+extrahiert den Pausenwert und wartet eine proportionale Zeit, bevor
+die nächste Datenübertragung gestartet wird. Soll dieses Warten
+vorzeitig unterbrochen werden, kann ein entsprechender Datenrahmen mit
+Null als Pausenwert versendet werden.
+
+Viele Implementierungen realisieren die Flusskontrolle als
+Start-Stopp-Verfahren, wobei nur zwei Pausenwerte genutzt werden: 0xFFFF zum
+Stoppen (X\_OFF) und 0x0000 zum Starten (X\_ON) des Datenflusses.
+
+\subsection{"`Jumbo Frames"'}
+%\paragraph{Jumbo Frames}\hspace{0cm}\\
+\label{sec:grundlagen_ethernet_jumboframes}
+
+Da die von Ethernet-Datenrahmen transportierten Protokolle, wie zum
+Beispiel IP, größere Pakete verschicken können als dies die
+Größenbeschränkung von IEEE 802.3 (1500 Byte) zulässt, werden
+Fragmentierung und Reassemblierung notwendig \cite[S. 375 ff.]{spurgeon2000}. Eine Alternative stellt
+die Vergrößerung der maximalen Datenrahmenlänge außerhalb des
+Standards dar. Entsprechende Datenrahmen werden als ``Jumbo Frames''
+bezeichnet und können bis zu 64 kiB groß sein. Da diese jedoch nicht
+durch den Standard abgedeckt sind, sind Implementierungen
+herstellerabhängig und untereinander selten kompatibel. Durch stetig
+wachsende Datenraten sowie Übertragungsvolumen ist zu erwarten, dass
+in der Zukunft Standardisierung von ``Jumbo Frames'' erfolgen wird.
+	
