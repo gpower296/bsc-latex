@@ -3,13 +3,10 @@
 
 In diesem Abschnitt meiner Arbeit, möchte ich zu erst die nötigen Grundlagen behandeln, um ein Basiswissen für die folgenden Kapitel sicherzustellen.
 Da sich die Arbeit hauptsächlich um den Bildmerkmal Algorithmus \textbf{Histogram of Oriented Gradients} Algorithmus dreht, fange ich mit diesem an.
-
 \section{Histogram of Oriented Gradients}
 \label{sec:grundlagenhog}
 Wie gerade erwähnt ist der \textbf{HOG} ein Bildmerkmal Algorithmus, der sich gegen bekannte Algorithmen (z.B. SIFT) bestens schlägt und dabei  effizienter arbeitet. Entwickelt und vorgestellt wurde der Algorithmus von Navneet Dalal und Bill Triggs im Paper $Histograms~of ~oriented~Gradients~for~Human~Detection$ \cite{dalal:inria-00548512} veröffentlicht.
-
 Grundlegend funktioniert der Algorithmus durch das Beschreiben von Verläufen. Diese Informationen werden in ein geeignetes Format gebracht um anschließend das betrachtete Bild zu klassifizieren. Wie in der ursprünglichen Arbeit, wird in dieser Arbeit erkannt ob ein Mensch in  einem Bild vorhanden ist.
-
 Den gesamten Ablauf kann man in Abbildung 2.1 sehen. Da einige Schritte für das Verständnis nicht erforderlich sind, werde ich nur einen Teil dieser erklären.
 
 \begin{figure}[htbp]\centering 
@@ -53,9 +50,7 @@ Diese Filter werden auf jeden Bildpunkt im Bild angewandt. Somit ergibt sich die
 \end{equation*}
 
 Dabei ist $x_k$ der betrachtete horizontale Bildpunkt und $y_k$ ist der betrachtete vertikale Bildpunkt.
-
 Jedoch aufgepasst, man muss beachten, dass bei einem Farbbild $g_x$ und $g_y$ für jeden Farbkanal berechnet werden müssen. Zusätzlich verhält sich die Berechnung am Rand des Bildes etwas anders.
-
 Wie in der Abbildung ... dargestellt, wird der Wert des Bildpunktes am Rand für die Berechnung einfach wiederholt.
 
 \begin{table}[h!]
@@ -76,12 +71,16 @@ Wie in der Abbildung ... dargestellt, wird der Wert des Bildpunktes am Rand für
 \end{table}
 
 Der letzte Schritt der Gradienten-Berechnung besteht darin, den Betrag  des Gradienten zu berechnen. Das geschieht nach dem Satz der Pythagoras durch:
+$$ \lvert G \rvert=\sqrt{g_{x_k}^{2}+g_{y_k}^{2}} $$
+Bevor man nun die Histogramme erstellen kann, benötigt man die Orientierung der Gradienten. Diese erhält man einfach durch:
+$$ \theta=\arctan\frac{g_{x_k}}{g_{y_k}} $$
 
-\begin{equation*}
-	\lvert G \rvert=\sqrt{g_{x_k}^{2}+g_{y_k}^{2}}
-\end{equation*}
-
-
+Um nun Histogramme zu erstellen benötigt man für den HOG-Algorithmus zwei Werte. Einmal die Magnitude des Gradienten und dessen Orientierung.
+Die Magnitude wird nach dem Satz von Pythagoras durch:
+$$ \lvert G \rvert=\sqrt{g_{x_k}^{2}+g_{y_k}^{2}} $$
+berechnet und die Orientierung durch:
+$$ \theta=\arctan\frac{g_{x_k}}{g_{y_k}} $$.
+Die Histogramme entstehen nun durch gewichtetes $binning$ (die Gruppierung zu Intervalle). 
 
 \section{Support Vector Machine}
 \label{sec:grundlagensvm}
