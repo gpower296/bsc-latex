@@ -70,11 +70,6 @@ Wie in der Abbildung ... dargestellt, wird der Wert des Bildpunktes am Rand für
 \end{tabular}
 \end{table}
 
-Der letzte Schritt der Gradienten-Berechnung besteht darin, den Betrag  des Gradienten zu berechnen. Das geschieht nach dem Satz der Pythagoras durch:
-$$ \lvert G \rvert=\sqrt{g_{x_k}^{2}+g_{y_k}^{2}} $$
-Bevor man nun die Histogramme erstellen kann, benötigt man die Orientierung der Gradienten. Diese erhält man einfach durch:
-$$ \theta=\arctan\frac{g_{x_k}}{g_{y_k}} $$
-
 Um nun Histogramme zu erstellen benötigt man für den HOG-Algorithmus zwei Werte. Einmal die Magnitude des Gradienten und dessen Orientierung.
 Die Magnitude wird nach dem Satz von Pythagoras durch:
 $$ \lvert G \rvert=\sqrt{g_{x_k}^{2}+g_{y_k}^{2}} $$
