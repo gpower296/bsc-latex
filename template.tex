@@ -149,12 +149,14 @@
 % color must appear AFTER graphicx!
 \usepackage{color}																				% provides colors such as Black, Blue etc.
 % \usepackage[caption=false]{subfig} 											% subfigures within a figure environment
-% \usepackage{tikz} %%Vektorgrafiken aus LaTeX heraus erstellen
+\usepackage{tikz} %%Vektorgrafiken aus LaTeX heraus erstellen
+\usetikzlibrary{calc}
+\usepackage{tkz-euclide}
 \usepackage{epsfig}
 %
 % Tables
 %
-\usepackage[table,xcdraw]{xcolor}
+% \usepackage[table,xcdraw]{xcolor}
 \usepackage{tabularx}																			% fixed overall width, variable column width for tables
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}		% additional columntypes for variable, yet justified columns
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
@@ -229,7 +231,7 @@ escapechar=||}																						% text within defined char is escaped to \La
 % rename bibliography and nomenclature for listing in caption
 \addto\captionsngerman{\renewcommand{\refname}{Quellenverzeichnis}}
 
-\renewcommand{\nomname}{AbkÃ¼rzungsverzeichnis}						% rename title of list to the matching german word
+\renewcommand{\nomname}{Abkürzungsverzeichnis}						% rename title of list to the matching german word
 \setlength{\nomlabelwidth}{.20\hsize}											% set abbreviation width
 \renewcommand{\nomlabel}[1]{#1 \dotfill}									% fill space between abbreviation & explanation
 \setlength{\nomitemsep}{-\parsep}													% vertical distance between abbreviations = paragraph distance
