@@ -153,6 +153,8 @@
 \usetikzlibrary{calc}
 \usepackage{tkz-euclide}
 \usepackage{epsfig}
+\usepackage{smartdiagram}%
+% Diagramme
 %
 % Tables
 %
@@ -171,7 +173,9 @@
 % Figure presentation
 %
 \usepackage{rotating}																			% rotate any object by an arbitrary angle
-\usepackage{subfigure}																		% create multiple sub-figure with own caption
+%\usepackage{subfigure}	
+\usepackage{subcaption} 
+% create multiple sub-figure with own caption
 \usepackage[squaren]{SIunits}															% write SI values with correct spacing, e.g. \unit{250}{\hour}
 \usepackage[right]{eurosym}																% symbol for currency EURO right of the value \EUR{10}
 \usepackage{capt-of}																			% caption for figure or tables (only necessary if caption and KOMA-Script are not used)
